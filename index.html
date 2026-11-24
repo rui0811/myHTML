@@ -1,37 +1,1455 @@
-<!DOCTYPE html><html lang=zh-CN><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><title>启动主页</title><style>:root{--acc:#5b3f8c;--ink:#3f3752;--mut:#857b9b;--line:rgba(91,63,140,.16)}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body,html{margin:0;padding:0}body{min-height:100dvh;color:var(--ink);font-family:system-ui,-apple-system,"PingFang SC","HarmonyOS Sans SC",MiSans,sans-serif;background:radial-gradient(1100px 700px at 50% -15%,#f8f5fc 0,rgba(248,245,252,0) 60%),linear-gradient(180deg,#f3eff8 0,#e8e2f0 100%);user-select:none;overscroll-behavior-y:contain}main{max-width:440px;margin:0 auto;padding:0 20px 40px}.brand{display:flex;justify-content:center;align-items:center;height:130px;padding-top:42px}.brand .logo svg{display:block}.brand .logo.google svg{height:44px;width:130px}.brand .logo.bing svg{height:70px;width:46px}.brand .logo.duckduckgo svg{height:64px;width:64px}.engines{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}.eng{border:1.5px solid var(--line);background:0 0;color:#6a5f80;border-radius:999px;padding:10px 20px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s;touch-action:manipulation}.eng:active{transform:scale(.95)}.eng.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600;box-shadow:0 10px 22px -10px rgba(91,63,140,.65)}.search{margin-top:24px;display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 14px 34px -20px rgba(64,40,110,.5)}.search .mag{width:22px;height:22px;flex:none;color:#9c92ad}.search input{flex:1;min-width:0;border:none;outline:0;background:0 0;font-size:16px;color:var(--ink);padding:10px 0;font-family:inherit}.search input::placeholder{color:#8f8899}#clearBtn{display:none;border:none;background:#efeaf4;color:#8d82a2;width:26px;height:26px;border-radius:50%;font-size:14px;cursor:pointer;padding:0;line-height:1}.search .go{border:none;cursor:pointer;background:var(--acc);color:#fff;border-radius:999px;padding:0 22px;height:42px;font-size:15.5px;font-weight:600;font-family:inherit;touch-action:manipulation}.search .go:active{filter:brightness(.92)}.desk{margin-top:32px;background:rgba(255,255,255,.52);border:1px solid rgba(255,255,255,.8);border-radius:24px;padding:20px 14px 14px;box-shadow:0 18px 40px -28px rgba(64,40,110,.55)}.grid{display:grid;grid-template-columns:repeat(4,1fr);row-gap:18px;column-gap:6px}.tile{display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;touch-action:manipulation}.tile .circle{width:56px;height:56px;border-radius:50%;background:#e9e4ef;display:flex;align-items:center;justify-content:center;transition:transform .15s;overflow:hidden}.tile:active .circle{transform:scale(.9)}.tile .circle img{width:30px;height:30px;object-fit:contain;display:block}.tile .letter{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;text-transform:uppercase}.tile .name{max-width:100%;font-size:13px;font-weight:500;color:#454050;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.tile.add .circle{background:0 0;border:1.5px dashed rgba(91,63,140,.3);color:#9586ac;font-size:26px;font-weight:300;line-height:1}.tile.add .name{color:#9586ac}.mask{position:fixed;inset:0;z-index:40;background:rgba(50,32,80,.36);display:flex;align-items:flex-end;justify-content:center;animation:fade .18s}.mask[hidden]{display:none}@keyframes fade{from{opacity:0}}.sheet{width:100%;max-width:520px;background:#fbf9fe;border-radius:26px 26px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));animation:up .24s cubic-bezier(.2,.9,.3,1.15);max-height:88dvh;overflow:auto}@keyframes up{from{transform:translateY(36px);opacity:.3}}.sheet h3{margin:0 0 18px;font-size:18px;font-weight:700}.inp{width:100%;padding:13px 15px;margin-bottom:12px;font-size:15.5px;color:var(--ink);border:1.5px solid #e6dff0;border-radius:15px;background:#fff;outline:0;font-family:inherit}.inp:focus{border-color:var(--acc)}.icon-row{display:flex;align-items:center;gap:10px;margin-top:2px}#icoBox{width:52px;height:52px;flex:none;border-radius:16px;background:#fff;border:1.5px solid #e6dff0;display:flex;align-items:center;justify-content:center;overflow:hidden}#icoBox img{width:34px;height:34px;object-fit:contain;display:block}#icoBox .letter{width:34px;height:34px;font-size:15px}.chip{border:1.5px solid #e6dff0;background:#fff;color:var(--mut);border-radius:999px;padding:10px 16px;font-size:13.5px;font-family:inherit;cursor:pointer}.chip.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}.sheet-actions{display:flex;gap:10px;margin-top:22px}.sheet-actions button{flex:1;border:none;border-radius:15px;padding:14px 0;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}.sheet-actions .ghost{background:#efe9f6;color:var(--mut)}.sheet-actions .primary{background:var(--acc);color:#fff}.menu-sheet{width:100%;max-width:520px;background:#fbf9fe;border-radius:26px 26px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom));animation:up .2s ease-out}.m-head{font-size:13px;color:var(--mut);padding:2px 10px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.menu-sheet button{display:block;width:100%;border:none;background:#fff;color:var(--ink);font-size:16px;padding:15px;border-radius:15px;margin-top:8px;cursor:pointer;font-family:inherit}.menu-sheet button.danger{color:#d9463f}.menu-sheet button.ghostline{background:#efe9f6;color:var(--mut)}
-.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.tile{min-width:0;transition:transform .18s cubic-bezier(.2,.9,.3,1.15)}
-.tile .name{width:100%}
-.tile.add[hidden]{display:none}
-.menu-sheet button[hidden]{display:none}
-.movebar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:14px;justify-content:center;padding:10px 18px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(232,226,240,0) 0,rgba(232,226,240,.86) 34%,#e8e2f0 100%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:up .18s ease-out}
-.movebar[hidden]{display:none}
-.movebar .arrow{flex:1;max-width:200px;height:58px;border:none;border-radius:20px;background:var(--acc);color:#fff;font-size:24px;font-weight:700;font-family:inherit;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 28px -16px rgba(91,63,140,.9);touch-action:manipulation;transition:transform .12s ease,opacity .12s ease,background .12s ease}
-.movebar .arrow:active{transform:scale(.93)}
-.movebar .arrow:disabled{background:#b7abd0;opacity:.5;box-shadow:none;cursor:default;transform:none}
-body.moving{padding-bottom:96px}
-body.moving .tile{cursor:default}
-body.moving .tile:active .circle{transform:none}
-.tile.lift{position:relative;z-index:5;transform:translateY(-4px) scale(1.12)}
-.tile.lift .circle{background:#fff;box-shadow:0 12px 22px -10px rgba(91,63,140,.6),0 0 0 2px rgba(91,63,140,.18)}
-.tile.lift .name{color:var(--acc);font-weight:700}
-</style><main><div class=brand id=brand></div><div class=engines id=engines></div><form class=search id=searchForm autocomplete=off><svg class=mag viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.2 stroke-linecap=round><circle cx=11 cy=11 r=7 /><path d="M16.5 16.5 21 21"/></svg> <input id=q type=text placeholder=搜索或输入网址 enterkeyhint=go> <button type=button id=clearBtn aria-label=清空>✕</button> <button type=submit class=go>搜索</button></form><section class=desk><div class=grid id=grid></div></section></main>
-<div class=movebar id=mvBar hidden><button type=button class=arrow id=mvL aria-label=向左移动>&lt;</button> <button type=button class=arrow id=mvR aria-label=向右移动>&gt;</button></div><div class=mask id=mask hidden><div class=sheet><h3 id=sheetTitle>添加快捷方式</h3><input id=fName class=inp type=text placeholder=名称（可留空，自动用域名）> <input id=fUrl class=inp type=text placeholder="输入网址，如 example.com" enterkeyhint=done><div class=icon-row><div id=icoBox></div><button type=button class=chip id=defaultBtn>默认图标</button> <button type=button class=chip id=pickBtn>自选图片</button></div><input id=fFile type=file accept=image/* hidden><div class=sheet-actions><button type=button class=ghost id=cancelBtn>取消</button> <button type=button class=primary id=saveBtn>保存</button></div></div></div><div class=mask id=menuMask hidden><div class=menu-sheet><div class=m-head id=menuTitle></div><div id=menuActions><button id=mNewTab>在新标签页打开</button> <button id=mMove>移动</button> <button id=mEdit>编辑</button> <button id=mDel class=danger>删除</button></div></div></div><script>var t={google:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 92"><path fill="#ea4335" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18m-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44"/><path fill="#fbbc05" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18m-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44"/><path fill="#4285f4" d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36"/><path fill="#34a853" d="M225 3v65h-9.5V3z"/><path fill="#ea4335" d="m262.02 54.48 7.56 5.04a22.1 22.1 0 0 1-18.48 9.83c-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72s8.4-2.44 10.92-6.14m-23.27-7.98 19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93"/><path fill="#4285f4" d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91S16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64a24 24 0 0 0-16.97-6.72c-13.86 0-24.7 11.17-24.7 25.03s10.84 25.03 24.7 25.03c8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65z"/></svg>',bing:'<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" fill="none" viewBox="0 0 678 1024"><path fill="url(#ba)" d="M0 778.3c14.6 123.8 223.8 143 236.8 79.9-.3-.4-.5-678.1-.5-678.1-3.6-46-26.2-72-61.6-96.5-33-22.7-74.4-50.4-96.9-66.4C14.2-28 .1 31.4 0 33.2c0 0 .3 746.4 0 745.1"/><path fill="url(#bb)" d="M236.8 832.8c-96.2 72.5-217 42.7-234.4-44-.8-4.2-2.4-10.4-2.4-10.4s.9 8.5 2 16.6c1.2 8.5 3.7 20.8 6.3 31.3 30 117.8 132.1 186 230.4 196.6C373.3 1034.8 497.4 931 599 855.8c6.3-6.2 15.4-16.2 18.1-20.1 66.2-95-13.6-197-72.5-193a59154 59154 0 0 0-307.7 190.1Z"/><path fill="url(#bc)" fill-rule="evenodd" d="M312.8 381c7.4 47 34.6 108.7 59.6 172.6 20.2 41.3 62 53.4 103 65.5 42.4 12.6 65.6 21 85.6 30.9 138.5 68.7 38.5 207.7 59.6 181.4 89-110.7 79.7-325.4-90-418.1-57.6-28.7-115.4-66.6-156.5-83.6-41-17-68.7 4.3-61.3 51.3" clip-rule="evenodd"/><defs><radialGradient id="bc" cx="0" cy="0" r="1" gradientTransform="matrix(-347 -399.3 287.3 -249.8 655 722)" gradientUnits="userSpaceOnUse"><stop stop-color="#00cacc"/><stop offset="1" stop-color="#048fce"/></radialGradient><radialGradient id="bb" cx="0" cy="0" r="1" gradientTransform="matrix(526 -225.4 375.6 876.6 88.8 915.1)" gradientUnits="userSpaceOnUse"><stop stop-color="#00bbec"/><stop offset="1" stop-color="#2756a9"/></radialGradient><linearGradient id="ba" x1="118.4" x2="118.4" y1="0" y2="884.4" gradientUnits="userSpaceOnUse"><stop stop-color="#00bbec"/><stop offset="1" stop-color="#2756a9"/></linearGradient></defs></svg>',duckduckgo:'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><g transform="translate(-17.95 -5.06)scale(.26667)"><circle cx="127.33" cy="78.97" r="51.15" fill="#de5833"/><defs><path id="da" d="M178.68 78.82a51.4 51.4 0 0 1-51.35 51.36c-28.31 0-51.35-23.04-51.35-51.36s23.04-51.35 51.35-51.35a51.4 51.4 0 0 1 51.35 51.35"/></defs><clipPath id="db"><use xlink:href="#da"/></clipPath><g clip-path="url(#db)"><path fill="#d5d7d8" d="M148.3 155.16c-1.8-8.29-12.27-27.04-16.24-34.97s-7.93-19.1-6.13-26.32c.33-1.32-3.43-11.31-2.35-12.02 8.42-5.5 10.63.6 14-1.86 1.74-1.27 4.1 1.05 4.7-1.06 2.16-7.57-3-20.76-8.77-26.53-1.88-1.88-4.77-3.06-8.03-3.68q-1.86-2.59-6.14-4.88c-3.19-1.7-10.12-3.94-13.71-4.54-2.5-.4-3.06.29-4.12.46.99.09 5.7 2.41 6.61 2.55-.92.62-3.6-.03-5.32.74-.87.4-1.52 1.88-1.5 2.58 4.9-.5 12.56-.01 17.1 2-3.61.4-9.09.87-11.45 2.1-6.84 3.62-9.87 12.04-8.07 22.14 1.8 10.08 9.74 46.85 12.27 59.13 2.52 12.26-5.41 20.2-10.46 22.35l5.41.37-1.8 3.96c6.48.72 13.7-1.44 13.7-1.44-1.44 3.97-11.18 5.42-11.18 5.42s4.7 1.43 12.26-1.45l12.26-4.69 3.6 9.37 6.86-6.84 2.88 7.2c.02 0 5.43-1.81 3.62-10.1z"/><path fill="#fff" d="M150.47 153.48c-1.8-8.3-12.26-27.05-16.23-34.98s-7.93-19.11-6.13-26.32c.34-1.3.34-6.67 1.43-7.38 8.4-5.5 7.81-.19 11.19-2.65 1.74-1.27 3.13-2.8 3.74-4.91 2.16-7.57-3-20.76-8.78-26.53-1.88-1.88-4.76-3.06-8.02-3.69q-1.86-2.58-6.13-4.88c-5.4-2.86-12.07-4-18.26-2.88 1 .1 3.25 2.14 4.16 2.27-1.38.94-5.05.82-5.03 2.9 4.92-.5 10.3.28 14.84 2.3-3.6.4-6.96 1.3-9.3 2.54-6.86 3.6-8.66 10.81-6.86 20.91 1.81 10.1 9.75 46.88 12.26 59.13 2.53 12.26-5.4 20.19-10.45 22.35l5.4.36-1.8 3.98c6.5.72 13.7-1.44 13.7-1.44-1.44 3.97-11.17 5.4-11.17 5.4s4.68 1.44 12.25-1.44l12.27-4.7 3.6 9.38 6.86-6.85 2.9 7.22c-.02 0 5.39-1.8 3.58-10.1z"/><path fill="#2d4f8e" d="M109.02 70.69a3.79 3.79 0 1 1 7.57 0 3.79 3.79 0 0 1-7.57 0"/><path fill="#fff" d="M113.5 69.43a1 1 0 0 1 .99-.98.98.98 0 1 1-.98.98"/><path fill="#2d4f8e" d="M134.87 68.44a3.25 3.25 0 1 1 3.25 3.26 3.26 3.26 0 0 1-3.25-3.26"/><path fill="#fff" d="M138.73 67.36c0-.46.38-.84.83-.84a.84.84 0 0 1 .85.84c0 .47-.37.85-.85.85a.84.84 0 0 1-.84-.85"/><linearGradient id="dc" x1="105.32" x2="113.89" y1="60.98" y2="60.98" gradientUnits="userSpaceOnUse"><stop offset=".01" stop-color="#6176b9"/><stop offset=".69" stop-color="#394a9f"/></linearGradient><path fill="url(#dc)" d="M113.89 59.72s-2.86-1.3-5.63.45-2.67 3.52-2.67 3.52-1.48-3.28 2.45-4.89 5.84.92 5.84.92z"/><linearGradient id="dd" x1="132.27" x2="140.08" y1="58.37" y2="58.37" gradientUnits="userSpaceOnUse"><stop offset=".01" stop-color="#6176b9"/><stop offset=".69" stop-color="#394a9f"/></linearGradient><path fill="url(#dd)" d="M140.08 59.46s-2.05-1.17-3.65-1.15c-3.27.04-4.16 1.48-4.16 1.48s.55-3.44 4.73-2.75a4.2 4.2 0 0 1 3.08 2.42"/></g><path fill="#fdd20a" d="M124.4 85.3c.38-2.3 6.3-6.63 10.5-6.9 4.2-.26 5.5-.2 9-1.04s12.54-3.08 15.03-4.24c2.5-1.15 13.1.57 5.63 4.74-3.23 1.8-11.94 5.13-18.17 6.99-6.22 1.86-10-1.78-12.06 1.28-1.65 2.43-.33 5.76 7.1 6.45 10.04.93 19.66-4.52 20.72-1.62s-8.62 6.5-14.52 6.62c-5.9.1-17.77-3.9-19.56-5.14s-4.16-4.13-3.67-7.15z"/><path fill="#65bc46" d="M128.94 115.6s-14.1-7.53-14.33-4.48c-.24 3.06 0 15.5 1.64 16.45s13.4-6.1 13.4-6.1zm5.4-.48s9.64-7.29 11.76-6.82c2.1.48 2.58 15.5.7 16.23-1.88.7-12.9-3.81-12.9-3.81z"/><path fill="#43a244" d="M125.53 116.4c0 4.93-.7 7.05 1.4 7.52s6.1 0 7.52-.94.23-7.28-.23-8.46c-.48-1.18-8.7-.24-8.7 1.88z"/><path fill="#65bc46" d="M126.43 115.3c0 4.93-.71 7.04 1.4 7.51 2.1.48 6.1 0 7.52-.94 1.4-.94.23-7.28-.24-8.46-.47-1.17-8.7-.23-8.7 1.88z"/><circle cx="127.33" cy="78.97" r="57.5" fill="none" stroke="#de5833" stroke-width="5"/></g></svg>'},e={google:{name:"Google",search:"https://www.google.com/search?q="},bing:{name:"Bing",search:"https://www.bing.com/search?q="},duckduckgo:{name:"DuckDuckGo",search:"https://duckduckgo.com/?q="}},n={engine:"google",shortcuts:[]};try{var c=localStorage.getItem("launcher_v3");if(c){var i=JSON.parse(c);i&&e[i.engine]&&(n.engine=i.engine),i&&Array.isArray(i.shortcuts)&&(n.shortcuts=i.shortcuts)}}catch(t){}function a(){try{localStorage.setItem("launcher_v3",JSON.stringify(n))}catch(t){}}var o=function(t){return document.getElementById(t)},r=o("brand"),l=o("engines"),s=o("grid"),u=o("q"),d=o("clearBtn");function f(){r.innerHTML='<div class="logo '+n.engine+'">'+t[n.engine]+"</div>"}function p(){l.innerHTML="",Object.keys(e).forEach(function(t){var c=document.createElement("button");c.type="button",c.className="eng"+(t===n.engine?" on":""),c.textContent=e[t].name,c.onclick=function(){n.engine=t,a(),f(),p()},l.appendChild(c)})}function m(t){try{var e=/^[a-z][a-z0-9+.-]*:\/\//i.test(t)?t:"https://"+t;return new URL(e).hostname.replace(/^www\./,"")}catch(t){return""}}function h(t){for(var e=0,n=0;n<t.length;n++)e=(31*e+t.charCodeAt(n))%360;return e}function v(t,e){var n=document.createElement("span");return n.className="letter",n.style.background="hsl("+h(e||t||"x")+",55%,55%)",n.textContent=(t||"?").trim().charAt(0).toUpperCase()||"?",n}function g(t,e,n){var c=m(t);if(c){var i=["https://"+c+"/favicon.ico","https://favicon.im/"+c],a=0;!function t(){if(a>=i.length)n();else{var c=i[a++],o=document.createElement("img"),r=!1,l=setTimeout(function(){r||(r=!0,o.removeAttribute("src"),t())},1800);o.onload=function(){r||(r=!0,clearTimeout(l),e(o))},o.onerror=function(){r||(r=!0,clearTimeout(l),t())},o.src=c}}()}else n()}function w(t){var e=document.createElement("div"),n=t.icon||{type:"auto"};if("custom"===n.type&&n.value){var c=document.createElement("img");return c.alt="",c.src=n.value,e.appendChild(c),e}var i=m(t.url),l=v(t.name||i,t.name||i||"x");return e.appendChild(l),g(t.url,function(t){t.alt="",l.parentNode&&l.parentNode.removeChild(l),e.appendChild(t)},function(){}),e}function k(t){setTimeout(function(){location.href=t},30)}function b(t){var e=document.createElement("div");e.className="tile",e.dataset.sid=t.id;var n=document.createElement("div");n.className="circle",n.appendChild(w(t)),e.appendChild(n);var c=document.createElement("div");c.className="name",c.textContent=t.name||m(t.url),e.appendChild(c);var i=!1,a=null,o=!1;return e.addEventListener("pointerdown",function(){if(moving)return;i=!0,a=setTimeout(function(){i&&(o=!0,navigator.vibrate&&navigator.vibrate(8),L(t.id))},520)}),["pointerup","pointercancel","pointerleave"].forEach(function(t){e.addEventListener(t,function(){i=!1,clearTimeout(a)})}),e.addEventListener("click",function(){if(moving)return;o?o=!1:k(t.url)}),e.addEventListener("contextmenu",function(e){if(e.preventDefault(),moving)return;o=!0,L(t.id)}),e}function x(){s.innerHTML="",n.shortcuts.forEach(function(t){s.appendChild(b(t))});if(moving)return;var t=document.createElement("div");t.className="tile add";var e=document.createElement("div");e.className="circle",e.textContent="+",t.appendChild(e);var c=document.createElement("div");c.className="name",c.textContent="添加",t.appendChild(c),t.onclick=function(){H(null)},s.appendChild(t)}function y(){f(),p(),x()}var C=o("menuMask"),M=null;function E(t){return n.shortcuts.find(function(e){return e.id===t})}function L(t){var e=E(t);e&&(M=t,o("menuTitle").textContent=(e.name||m(e.url))+" · "+e.url,o("menuActions").hidden=!1,o("mMove").hidden=n.shortcuts.length<2,C.hidden=!1)}function T(){C.hidden=!0,M=null}C.addEventListener("click",function(t){t.target===C&&T()}),o("mNewTab").onclick=function(){var t=E(M);if(T(),t){var e=window.open("about:blank","_blank");e?setTimeout(function(){try{e.location.href=t.url}catch(e){k(t.url)}},40):k(t.url)}},o("mMove").onclick=function(t){t.stopPropagation(),startMove()},o("mEdit").onclick=function(){var t=E(M);T(),t&&H(t)},o("mDel").onclick=function(){var t=M;T(),t&&(n.shortcuts=n.shortcuts.filter(function(e){return e.id!==t}),a(),mvRemove(t))};var U=o("mask"),z=null,S="auto",B="",N=0,G=o("fName"),A=o("fUrl"),O=o("icoBox");function D(){O.innerHTML="",o("defaultBtn").classList.toggle("on","custom"!==S),o("pickBtn").classList.toggle("on","custom"===S);if("custom"===S&&B){var t=document.createElement("img");t.src=B,t.alt="",O.appendChild(t);return}var e=A.value.trim(),n=m(e);if(z){var cu=E(z);if(cu&&cu.url===e){var tl=mvTile(z),ci=tl&&tl.querySelector(".circle");if(ci&&ci.firstChild){O.appendChild(ci.firstChild.cloneNode(!0));return}}}var ph=v(G.value||n,n);if(O.appendChild(ph),!n)return;var c=++N;g(e,function(t){c===N&&(O.innerHTML="",t.alt="",O.appendChild(t))},function(){})}function H(t){z=t?t.id:null,o("sheetTitle").textContent=t?"编辑快捷方式":"添加快捷方式",G.value=t&&t.name||"",A.value=t?t.url:"",S=t&&t.icon&&"custom"===t.icon.type&&t.icon.value?"custom":"auto",B=t&&t.icon&&"custom"===t.icon.type?t.icon.value:"",D(),U.hidden=!1,t||setTimeout(function(){A.focus()},150)}function q(){U.hidden=!0,z=null,B="",S="auto"}U.addEventListener("click",function(t){t.target===U&&q()}),o("cancelBtn").onclick=q;var I=null;function R(t){return/^https?:\/\/\S+$/i.test(t)||/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(t)}A.addEventListener("input",function(){"auto"===S&&(clearTimeout(I),I=setTimeout(D,220))}),G.addEventListener("input",function(){"auto"!==S||m(A.value.trim())||D()}),o("pickBtn").onclick=function(){o("fFile").click()},o("fFile").addEventListener("change",function(){var t=this.files&&this.files[0];if(t){var e=new FileReader;e.onload=function(){var t=new Image;t.onload=function(){var e=128,n=document.createElement("canvas");n.width=e,n.height=e;var c=n.getContext("2d"),i=Math.min(t.width,t.height);c.drawImage(t,(t.width-i)/2,(t.height-i)/2,i,i,0,0,e,e),B=n.toDataURL("image/png"),S="custom",D()},t.src=e.result},e.readAsDataURL(t),this.value=""}}),o("defaultBtn").onclick=function(){B="",S="auto",D()},o("saveBtn").onclick=function(){var t=A.value.trim();if(!t){A.focus();return}/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(t)||(t="https://"+t);try{t=new URL(t).href}catch(e){A.focus();return}var e=G.value.trim()||m(t)||t,c="custom"===S&&B?{type:"custom",value:B}:{type:"auto"},g2=JSON.stringify(c);if(z){var i=E(z);if(i){var u0=i.url,i0=JSON.stringify(i.icon||{type:"auto"});i.name=e,i.url=t,i.icon=c,a(),mvName(i),u0===t&&i0===g2||mvIcon(i)}}else{var nn={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:e,url:t,icon:c};n.shortcuts.push(nn),a(),mvAddTile(nn)}q()},o("searchForm").addEventListener("submit",function(t){t.preventDefault();var c=u.value.trim();c?R(c)?k(/^https?:\/\//i.test(c)?c:"https://"+c):k(e[n.engine].search+encodeURIComponent(c)):u.focus()}),u.addEventListener("input",function(){d.style.display=u.value?"block":"none"}),d.onclick=function(){u.value="",d.style.display="none",u.focus()},y();
-var mvBar=o("mvBar"),mvL=o("mvL"),mvR=o("mvR"),mvId=null,moving=!1;
-function mvIdx(t){for(var e=0;e<n.shortcuts.length;e++)if(n.shortcuts[e].id===t)return e;return -1}
-function mvTile(t){for(var e=0;e<s.children.length;e++){var c=s.children[e];if(c.dataset&&c.dataset.sid===t)return c}return null}
-function mvAdd(){for(var t=0;t<s.children.length;t++)if(s.children[t].classList.contains("add"))return s.children[t];return null}
-function mvArrange(){n.shortcuts.forEach(function(t){var e=mvTile(t.id);e&&s.appendChild(e)});var e=mvAdd();e&&s.appendChild(e)}
-function mvSync(){var t=mvIdx(mvId);mvL.disabled=t<=0,mvR.disabled=t<0||t>=n.shortcuts.length-1}
-function mvName(t){var e=mvTile(t.id);if(e){var c=e.querySelector(".name");c&&(c.textContent=t.name||m(t.url))}}
-function mvIcon(t){var e=mvTile(t.id);if(e){var c=e.querySelector(".circle");c&&(c.innerHTML="",c.appendChild(w(t)))}}
-function mvAddTile(t){var e=b(t),c=mvAdd();c?s.insertBefore(e,c):s.appendChild(e)}
-function mvRemove(t){var e=mvTile(t);e&&e.parentNode&&e.parentNode.removeChild(e)}
-function startMove(){var t=M;if(T(),!t||n.shortcuts.length<2)return;moving=!0,mvId=t,document.body.classList.add("moving"),mvBar.hidden=!1,s.style.minHeight=s.offsetHeight+"px";var e=mvTile(t);e&&e.classList.add("lift");var c=mvAdd();c&&(c.hidden=!0);mvSync();navigator.vibrate&&navigator.vibrate(6)}
-function exitMove(){if(!moving)return;var t=mvTile(mvId);t&&t.classList.remove("lift"),moving=!1,mvId=null,document.body.classList.remove("moving"),mvBar.hidden=!0,s.style.minHeight="";var e=mvAdd();e&&(e.hidden=!1)}
-function mvStep(t){if(!moving)return;var e=mvIdx(mvId),c=e+t;if(e<0||c<0||c>=n.shortcuts.length)return;var i=n.shortcuts[e];n.shortcuts[e]=n.shortcuts[c],n.shortcuts[c]=i,a(),mvArrange(),mvSync(),navigator.vibrate&&navigator.vibrate(8)}
-mvL.onclick=function(t){t.stopPropagation(),t.preventDefault(),mvStep(-1)};
-mvR.onclick=function(t){t.stopPropagation(),t.preventDefault(),mvStep(1)};
-document.addEventListener("click",function(t){if(!moving||mvBar.contains(t.target))return;t.stopPropagation(),t.preventDefault(),exitMove()},!0);
-document.addEventListener("keydown",function(t){"Escape"!==t.key&&"Esc"!==t.key||exitMove()});
-</script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>启动主页</title>
+  <style>
+    /* ---------- 基础 / 主题色 ---------- */
+    :root {
+      --acc: #5b3f8c;
+      --ink: #3f3752;
+      --mut: #857b9b;
+      --line: rgba(91,63,140,.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body,html {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100dvh;
+      color: var(--ink);
+      font-family: system-ui,-apple-system,"PingFang SC","HarmonyOS Sans SC",MiSans,sans-serif;
+      background: radial-gradient(1100px 700px at 50% -15%,#f8f5fc 0,rgba(248,245,252,0) 60%),linear-gradient(180deg,#f3eff8 0,#e8e2f0 100%);
+      user-select: none;
+      overscroll-behavior-y: contain;
+    }
+
+    main {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    /* ---------- 顶部：logo、引擎切换、搜索框 ---------- */
+    .brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 130px;
+      padding-top: 42px;
+    }
+
+    .brand .logo svg {
+      display: block;
+    }
+
+    .brand .logo.google svg {
+      height: 44px;
+      width: 130px;
+    }
+
+    .brand .logo.bing svg {
+      height: 70px;
+      width: 46px;
+    }
+
+    .brand .logo.duckduckgo svg {
+      height: 64px;
+      width: 64px;
+    }
+
+    .engines {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .eng {
+      border: 1.5px solid var(--line);
+      background: 0 0;
+      color: #6a5f80;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .2s;
+      touch-action: manipulation;
+    }
+
+    .eng:active {
+      transform: scale(.95);
+    }
+
+    .eng.on {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 10px 22px -10px rgba(91,63,140,.65);
+    }
+
+    .search {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 6px 6px 18px;
+      box-shadow: 0 14px 34px -20px rgba(64,40,110,.5);
+    }
+
+    .search .mag {
+      width: 22px;
+      height: 22px;
+      flex: none;
+      color: #9c92ad;
+    }
+
+    .search input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: 0;
+      background: 0 0;
+      font-size: 16px;
+      color: var(--ink);
+      padding: 10px 0;
+      font-family: inherit;
+    }
+
+    .search input::placeholder {
+      color: #8f8899;
+    }
+
+    #clearBtn {
+      display: none;
+      border: none;
+      background: #efeaf4;
+      color: #8d82a2;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .search .go {
+      border: none;
+      cursor: pointer;
+      background: var(--acc);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0 22px;
+      height: 42px;
+      font-size: 15.5px;
+      font-weight: 600;
+      font-family: inherit;
+      touch-action: manipulation;
+    }
+
+    .search .go:active {
+      filter: brightness(.92);
+    }
+
+    /* ---------- 快捷方式网格 ---------- */
+    .desk {
+      margin-top: 32px;
+      background: rgba(255,255,255,.52);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 24px;
+      padding: 20px 14px 14px;
+      box-shadow: 0 18px 40px -28px rgba(64,40,110,.55);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      row-gap: 18px;
+      column-gap: 6px;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .tile .circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #e9e4ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s;
+      overflow: hidden;
+    }
+
+    .tile:active .circle {
+      transform: scale(.9);
+    }
+
+    .tile .circle img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .tile .letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+
+    .tile .name {
+      max-width: 100%;
+      font-size: 13px;
+      font-weight: 500;
+      color: #454050;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+
+    .tile.add .circle {
+      background: 0 0;
+      border: 1.5px dashed rgba(91,63,140,.3);
+      color: #9586ac;
+      font-size: 26px;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .tile.add .name {
+      color: #9586ac;
+    }
+
+    /* ---------- 弹窗：添加/编辑、长按菜单 ---------- */
+    .mask {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(50,32,80,.36);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: fade .18s;
+    }
+
+    .mask[hidden] {
+      display: none;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+    }
+
+    .sheet {
+      width: 100%;
+      max-width: 520px;
+      background: #fbf9fe;
+      border-radius: 26px 26px 0 0;
+      padding: 22px 20px calc(24px + env(safe-area-inset-bottom));
+      animation: up .24s cubic-bezier(.2,.9,.3,1.15);
+      max-height: 88dvh;
+      overflow: auto;
+    }
+
+    @keyframes up {
+      from {
+        transform: translateY(36px);
+        opacity: .3;
+      }
+    }
+
+    .sheet h3 {
+      margin: 0 0 18px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .inp {
+      width: 100%;
+      padding: 13px 15px;
+      margin-bottom: 12px;
+      font-size: 15.5px;
+      color: var(--ink);
+      border: 1.5px solid #e6dff0;
+      border-radius: 15px;
+      background: #fff;
+      outline: 0;
+      font-family: inherit;
+    }
+
+    .inp:focus {
+      border-color: var(--acc);
+    }
+
+    .icon-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    #icoBox {
+      width: 52px;
+      height: 52px;
+      flex: none;
+      border-radius: 16px;
+      background: #fff;
+      border: 1.5px solid #e6dff0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #icoBox img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+
+    #icoBox .letter {
+      width: 34px;
+      height: 34px;
+      font-size: 15px;
+    }
+
+    .chip {
+      border: 1.5px solid #e6dff0;
+      background: #fff;
+      color: var(--mut);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .chip.on {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .sheet-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .sheet-actions button {
+      flex: 1;
+      border: none;
+      border-radius: 15px;
+      padding: 14px 0;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sheet-actions .ghost {
+      background: #efe9f6;
+      color: var(--mut);
+    }
+
+    .sheet-actions .primary {
+      background: var(--acc);
+      color: #fff;
+    }
+
+    .menu-sheet {
+      width: 100%;
+      max-width: 520px;
+      background: #fbf9fe;
+      border-radius: 26px 26px 0 0;
+      padding: 16px 14px calc(20px + env(safe-area-inset-bottom));
+      animation: up .2s ease-out;
+    }
+
+    .m-head {
+      font-size: 13px;
+      color: var(--mut);
+      padding: 2px 10px 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .menu-sheet button {
+      display: block;
+      width: 100%;
+      border: none;
+      background: #fff;
+      color: var(--ink);
+      font-size: 16px;
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .menu-sheet button.danger {
+      color: #d9463f;
+    }
+
+    .menu-sheet button.ghostline {
+      background: #efe9f6;
+      color: var(--mut);
+    }
+
+    .tile {
+      min-width: 0;
+      transition: transform .18s cubic-bezier(.2,.9,.3,1.15);
+    }
+
+    .tile .name {
+      width: 100%;
+    }
+
+    .tile.add[hidden] {
+      display: none;
+    }
+
+    .menu-sheet button[hidden] {
+      display: none;
+    }
+
+    /* ---------- 移动模式（底部栏 + 被选中的图标） ---------- */
+    .movebar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      padding: 10px 18px calc(14px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg,rgba(232,226,240,0) 0,rgba(232,226,240,.86) 34%,#e8e2f0 100%);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      animation: up .18s ease-out;
+    }
+
+    .movebar[hidden] {
+      display: none;
+    }
+
+    .movebar .arrow {
+      flex: 1;
+      max-width: 200px;
+      height: 58px;
+      border: none;
+      border-radius: 20px;
+      background: var(--acc);
+      color: #fff;
+      font-size: 24px;
+      font-weight: 700;
+      font-family: inherit;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16px 28px -16px rgba(91,63,140,.9);
+      touch-action: manipulation;
+      transition: transform .12s ease,opacity .12s ease,background .12s ease;
+    }
+
+    .movebar .arrow:active {
+      transform: scale(.93);
+    }
+
+    .movebar .arrow:disabled {
+      background: #b7abd0;
+      opacity: .5;
+      box-shadow: none;
+      cursor: default;
+      transform: none;
+    }
+
+    body.moving {
+      padding-bottom: 96px;
+    }
+
+    body.moving .tile {
+      cursor: default;
+    }
+
+    body.moving .tile:active .circle {
+      transform: none;
+    }
+
+    .tile.lift {
+      position: relative;
+      z-index: 5;
+      transform: translateY(-4px) scale(1.12);
+    }
+
+    .tile.lift .circle {
+      background: #fff;
+      box-shadow: 0 12px 22px -10px rgba(91,63,140,.6),0 0 0 2px rgba(91,63,140,.18);
+    }
+
+    .tile.lift .name {
+      color: var(--acc);
+      font-weight: 700;
+    }
+
+    /* ---------- PC 适配 ---------- */
+    /* 通用：输入框可选中文字、键盘焦点轮廓、图标过渡 */
+    input {
+      user-select: text;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--acc);
+      outline-offset: 2px;
+    }
+
+    .mvhint {
+      display: none;
+    }
+
+    .tile .circle {
+      transition: transform .15s,background .15s,box-shadow .15s;
+    }
+
+    /* 宽屏 ≥768px：更宽的容器、6 列网格、居中弹窗 */
+    @media (min-width:768px) {
+      main {
+        max-width: 680px;
+        padding-top: 7vh;
+      }
+      .brand {
+        height: 150px;
+      }
+      .engines {
+        margin-top: 26px;
+      }
+      .search {
+        margin-top: 30px;
+        padding: 8px 8px 8px 22px;
+      }
+      .search input {
+        font-size: 17px;
+      }
+      .desk {
+        margin-top: 44px;
+        padding: 28px 20px 22px;
+        border-radius: 28px;
+      }
+      .grid {
+        grid-template-columns: repeat(6,minmax(0,1fr));
+        row-gap: 26px;
+        column-gap: 10px;
+      }
+      .tile .circle {
+        width: 64px;
+        height: 64px;
+      }
+      .tile .circle img {
+        width: 34px;
+        height: 34px;
+      }
+      .tile .letter {
+        width: 34px;
+        height: 34px;
+        font-size: 17px;
+      }
+      .tile .name {
+        font-size: 13.5px;
+      }
+      .mask {
+        align-items: center;
+      }
+      .sheet,.menu-sheet {
+        border-radius: 26px;
+        max-width: 440px;
+      }
+      .menu-sheet {
+        max-width: 360px;
+      }
+      .movebar {
+        padding-bottom: 18px;
+      }
+      .movebar .arrow {
+        flex: none;
+        width: 88px;
+        height: 48px;
+        border-radius: 16px;
+        font-size: 20px;
+      }
+      .mvhint {
+        display: block;
+        align-self: center;
+        font-size: 13px;
+        color: var(--mut);
+        margin-left: 6px;
+      }
+      body.moving {
+        padding-bottom: 110px;
+      }
+    }
+
+    /* 超宽 ≥1200px：8 列 */
+    @media (min-width:1200px) {
+      main {
+        max-width: 860px;
+      }
+      .grid {
+        grid-template-columns: repeat(8,minmax(0,1fr));
+      }
+    }
+
+    /* 有鼠标的设备：hover 效果 */
+    @media (hover:hover) and (pointer:fine) {
+      .eng:hover {
+        border-color: var(--acc);
+        color: var(--acc);
+      }
+      .eng.on:hover {
+        color: #fff;
+      }
+      .search .go:hover {
+        filter: brightness(1.1);
+      }
+      #clearBtn:hover {
+        background: #e4dcee;
+        color: var(--acc);
+      }
+      body:not(.moving) .tile:hover .circle {
+        background: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 22px -12px rgba(91,63,140,.55);
+      }
+      body:not(.moving) .tile:hover .name {
+        color: var(--acc);
+      }
+      body:not(.moving) .tile.add:hover .circle {
+        background: 0 0;
+        box-shadow: none;
+        border-color: var(--acc);
+        color: var(--acc);
+      }
+      body:not(.moving) .tile:active .circle {
+        transform: scale(.92);
+      }
+      .chip:hover {
+        border-color: var(--acc);
+        color: var(--acc);
+      }
+      .chip.on:hover {
+        color: #fff;
+      }
+      .sheet-actions .ghost:hover,.menu-sheet button.ghostline:hover {
+        background: #e6ddf0;
+      }
+      .sheet-actions .primary:hover,.movebar .arrow:hover:not(:disabled) {
+        filter: brightness(1.1);
+      }
+      .menu-sheet button:hover {
+        background: #f1ebf8;
+      }
+      .menu-sheet button.danger:hover {
+        background: #fdeeed;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand" id="brand"></div>
+    <div class="engines" id="engines"></div>
+
+    <form class="search" id="searchForm" autocomplete="off">
+      <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M16.5 16.5 21 21"/>
+      </svg>
+      <input id="q" type="text" placeholder="搜索或输入网址" enterkeyhint="go">
+      <button type="button" id="clearBtn" aria-label="清空">✕</button>
+      <button type="submit" class="go">搜索</button>
+    </form>
+
+    <section class="desk">
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <!-- 移动模式底部栏 -->
+  <div class="movebar" id="mvBar" hidden>
+    <button type="button" class="arrow" id="mvL" aria-label="向左移动">&lt;</button>
+    <button type="button" class="arrow" id="mvR" aria-label="向右移动">&gt;</button>
+    <span class="mvhint">← → 移动 · Enter/Esc 完成</span>
+  </div>
+
+  <!-- 添加/编辑快捷方式 -->
+  <div class="mask" id="mask" hidden>
+    <div class="sheet">
+      <h3 id="sheetTitle">添加快捷方式</h3>
+      <input id="fName" class="inp" type="text" placeholder="名称（可留空，自动用域名）">
+      <input id="fUrl" class="inp" type="text" placeholder="输入网址，如 example.com" enterkeyhint="done">
+      <div class="icon-row">
+        <div id="icoBox"></div>
+        <button type="button" class="chip" id="defaultBtn">默认图标</button>
+        <button type="button" class="chip" id="pickBtn">自选图片</button>
+      </div>
+      <input id="fFile" type="file" accept="image/*" hidden>
+      <div class="sheet-actions">
+        <button type="button" class="ghost" id="cancelBtn">取消</button>
+        <button type="button" class="primary" id="saveBtn">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 长按 / 右键菜单 -->
+  <div class="mask" id="menuMask" hidden>
+    <div class="menu-sheet">
+      <div class="m-head" id="menuTitle"></div>
+      <div id="menuActions">
+        <button id="mNewTab">在新标签页打开</button>
+        <button id="mMove">移动</button>
+        <button id="mEdit">编辑</button>
+        <button id="mDel" class="danger">删除</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================
+     * 启动主页：搜索框 + 快捷方式网格
+     * 数据全部存在 localStorage（键名见 STORAGE_KEY），无任何外部依赖
+     * ========================================================== */
+
+    /* ---------- 常量 ---------- */
+    const STORAGE_KEY = 'launcher_v3';
+    const LONG_PRESS_MS = 520;      // 触屏长按多久弹出菜单
+    const FAVICON_TIMEOUT_MS = 1800; // 单个 favicon 源的超时时间
+    const SCHEME_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
+
+    /* 搜索引擎的 logo（内联 SVG，离线也能显示） */
+    const LOGOS = {
+      google: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 92"><path fill="#ea4335" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18m-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44"/><path fill="#fbbc05" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18m-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44"/><path fill="#4285f4" d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36"/><path fill="#34a853" d="M225 3v65h-9.5V3z"/><path fill="#ea4335" d="m262.02 54.48 7.56 5.04a22.1 22.1 0 0 1-18.48 9.83c-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72s8.4-2.44 10.92-6.14m-23.27-7.98 19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93"/><path fill="#4285f4" d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91S16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64a24 24 0 0 0-16.97-6.72c-13.86 0-24.7 11.17-24.7 25.03s10.84 25.03 24.7 25.03c8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65z"/></svg>',
+      bing: '<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" fill="none" viewBox="0 0 678 1024"><path fill="url(#ba)" d="M0 778.3c14.6 123.8 223.8 143 236.8 79.9-.3-.4-.5-678.1-.5-678.1-3.6-46-26.2-72-61.6-96.5-33-22.7-74.4-50.4-96.9-66.4C14.2-28 .1 31.4 0 33.2c0 0 .3 746.4 0 745.1"/><path fill="url(#bb)" d="M236.8 832.8c-96.2 72.5-217 42.7-234.4-44-.8-4.2-2.4-10.4-2.4-10.4s.9 8.5 2 16.6c1.2 8.5 3.7 20.8 6.3 31.3 30 117.8 132.1 186 230.4 196.6C373.3 1034.8 497.4 931 599 855.8c6.3-6.2 15.4-16.2 18.1-20.1 66.2-95-13.6-197-72.5-193a59154 59154 0 0 0-307.7 190.1Z"/><path fill="url(#bc)" fill-rule="evenodd" d="M312.8 381c7.4 47 34.6 108.7 59.6 172.6 20.2 41.3 62 53.4 103 65.5 42.4 12.6 65.6 21 85.6 30.9 138.5 68.7 38.5 207.7 59.6 181.4 89-110.7 79.7-325.4-90-418.1-57.6-28.7-115.4-66.6-156.5-83.6-41-17-68.7 4.3-61.3 51.3" clip-rule="evenodd"/><defs><radialGradient id="bc" cx="0" cy="0" r="1" gradientTransform="matrix(-347 -399.3 287.3 -249.8 655 722)" gradientUnits="userSpaceOnUse"><stop stop-color="#00cacc"/><stop offset="1" stop-color="#048fce"/></radialGradient><radialGradient id="bb" cx="0" cy="0" r="1" gradientTransform="matrix(526 -225.4 375.6 876.6 88.8 915.1)" gradientUnits="userSpaceOnUse"><stop stop-color="#00bbec"/><stop offset="1" stop-color="#2756a9"/></radialGradient><linearGradient id="ba" x1="118.4" x2="118.4" y1="0" y2="884.4" gradientUnits="userSpaceOnUse"><stop stop-color="#00bbec"/><stop offset="1" stop-color="#2756a9"/></linearGradient></defs></svg>',
+      duckduckgo: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><g transform="translate(-17.95 -5.06)scale(.26667)"><circle cx="127.33" cy="78.97" r="51.15" fill="#de5833"/><defs><path id="da" d="M178.68 78.82a51.4 51.4 0 0 1-51.35 51.36c-28.31 0-51.35-23.04-51.35-51.36s23.04-51.35 51.35-51.35a51.4 51.4 0 0 1 51.35 51.35"/></defs><clipPath id="db"><use xlink:href="#da"/></clipPath><g clip-path="url(#db)"><path fill="#d5d7d8" d="M148.3 155.16c-1.8-8.29-12.27-27.04-16.24-34.97s-7.93-19.1-6.13-26.32c.33-1.32-3.43-11.31-2.35-12.02 8.42-5.5 10.63.6 14-1.86 1.74-1.27 4.1 1.05 4.7-1.06 2.16-7.57-3-20.76-8.77-26.53-1.88-1.88-4.77-3.06-8.03-3.68q-1.86-2.59-6.14-4.88c-3.19-1.7-10.12-3.94-13.71-4.54-2.5-.4-3.06.29-4.12.46.99.09 5.7 2.41 6.61 2.55-.92.62-3.6-.03-5.32.74-.87.4-1.52 1.88-1.5 2.58 4.9-.5 12.56-.01 17.1 2-3.61.4-9.09.87-11.45 2.1-6.84 3.62-9.87 12.04-8.07 22.14 1.8 10.08 9.74 46.85 12.27 59.13 2.52 12.26-5.41 20.2-10.46 22.35l5.41.37-1.8 3.96c6.48.72 13.7-1.44 13.7-1.44-1.44 3.97-11.18 5.42-11.18 5.42s4.7 1.43 12.26-1.45l12.26-4.69 3.6 9.37 6.86-6.84 2.88 7.2c.02 0 5.43-1.81 3.62-10.1z"/><path fill="#fff" d="M150.47 153.48c-1.8-8.3-12.26-27.05-16.23-34.98s-7.93-19.11-6.13-26.32c.34-1.3.34-6.67 1.43-7.38 8.4-5.5 7.81-.19 11.19-2.65 1.74-1.27 3.13-2.8 3.74-4.91 2.16-7.57-3-20.76-8.78-26.53-1.88-1.88-4.76-3.06-8.02-3.69q-1.86-2.58-6.13-4.88c-5.4-2.86-12.07-4-18.26-2.88 1 .1 3.25 2.14 4.16 2.27-1.38.94-5.05.82-5.03 2.9 4.92-.5 10.3.28 14.84 2.3-3.6.4-6.96 1.3-9.3 2.54-6.86 3.6-8.66 10.81-6.86 20.91 1.81 10.1 9.75 46.88 12.26 59.13 2.53 12.26-5.4 20.19-10.45 22.35l5.4.36-1.8 3.98c6.5.72 13.7-1.44 13.7-1.44-1.44 3.97-11.17 5.4-11.17 5.4s4.68 1.44 12.25-1.44l12.27-4.7 3.6 9.38 6.86-6.85 2.9 7.22c-.02 0 5.39-1.8 3.58-10.1z"/><path fill="#2d4f8e" d="M109.02 70.69a3.79 3.79 0 1 1 7.57 0 3.79 3.79 0 0 1-7.57 0"/><path fill="#fff" d="M113.5 69.43a1 1 0 0 1 .99-.98.98.98 0 1 1-.98.98"/><path fill="#2d4f8e" d="M134.87 68.44a3.25 3.25 0 1 1 3.25 3.26 3.26 3.26 0 0 1-3.25-3.26"/><path fill="#fff" d="M138.73 67.36c0-.46.38-.84.83-.84a.84.84 0 0 1 .85.84c0 .47-.37.85-.85.85a.84.84 0 0 1-.84-.85"/><linearGradient id="dc" x1="105.32" x2="113.89" y1="60.98" y2="60.98" gradientUnits="userSpaceOnUse"><stop offset=".01" stop-color="#6176b9"/><stop offset=".69" stop-color="#394a9f"/></linearGradient><path fill="url(#dc)" d="M113.89 59.72s-2.86-1.3-5.63.45-2.67 3.52-2.67 3.52-1.48-3.28 2.45-4.89 5.84.92 5.84.92z"/><linearGradient id="dd" x1="132.27" x2="140.08" y1="58.37" y2="58.37" gradientUnits="userSpaceOnUse"><stop offset=".01" stop-color="#6176b9"/><stop offset=".69" stop-color="#394a9f"/></linearGradient><path fill="url(#dd)" d="M140.08 59.46s-2.05-1.17-3.65-1.15c-3.27.04-4.16 1.48-4.16 1.48s.55-3.44 4.73-2.75a4.2 4.2 0 0 1 3.08 2.42"/></g><path fill="#fdd20a" d="M124.4 85.3c.38-2.3 6.3-6.63 10.5-6.9 4.2-.26 5.5-.2 9-1.04s12.54-3.08 15.03-4.24c2.5-1.15 13.1.57 5.63 4.74-3.23 1.8-11.94 5.13-18.17 6.99-6.22 1.86-10-1.78-12.06 1.28-1.65 2.43-.33 5.76 7.1 6.45 10.04.93 19.66-4.52 20.72-1.62s-8.62 6.5-14.52 6.62c-5.9.1-17.77-3.9-19.56-5.14s-4.16-4.13-3.67-7.15z"/><path fill="#65bc46" d="M128.94 115.6s-14.1-7.53-14.33-4.48c-.24 3.06 0 15.5 1.64 16.45s13.4-6.1 13.4-6.1zm5.4-.48s9.64-7.29 11.76-6.82c2.1.48 2.58 15.5.7 16.23-1.88.7-12.9-3.81-12.9-3.81z"/><path fill="#43a244" d="M125.53 116.4c0 4.93-.7 7.05 1.4 7.52s6.1 0 7.52-.94.23-7.28-.23-8.46c-.48-1.18-8.7-.24-8.7 1.88z"/><path fill="#65bc46" d="M126.43 115.3c0 4.93-.71 7.04 1.4 7.51 2.1.48 6.1 0 7.52-.94 1.4-.94.23-7.28-.24-8.46-.47-1.17-8.7-.23-8.7 1.88z"/><circle cx="127.33" cy="78.97" r="57.5" fill="none" stroke="#de5833" stroke-width="5"/></g></svg>'
+    };
+
+    /* 搜索引擎：显示名 + 搜索地址前缀 */
+    const ENGINES = {
+      google:     { name: 'Google',     search: 'https://www.google.com/search?q=' },
+      bing:       { name: 'Bing',       search: 'https://www.bing.com/search?q=' },
+      duckduckgo: { name: 'DuckDuckGo', search: 'https://duckduckgo.com/?q=' }
+    };
+
+    /* ---------- 状态与持久化 ---------- */
+    /* shortcuts 的每一项：{ id, name, url, icon: { type: 'auto' } | { type: 'custom', value: dataURL } } */
+    const state = { engine: 'google', shortcuts: [] };
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved && ENGINES[saved.engine]) state.engine = saved.engine;
+        if (saved && Array.isArray(saved.shortcuts)) state.shortcuts = saved.shortcuts;
+      } catch (e) { /* 数据损坏或存储不可用：用默认值 */ }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) { /* 存储满了或被禁用：忽略 */ }
+    }
+
+    /* ---------- DOM 引用 ---------- */
+    const $ = id => document.getElementById(id);
+
+    const brandEl     = $('brand');
+    const enginesEl   = $('engines');
+    const gridEl      = $('grid');
+    const searchForm  = $('searchForm');
+    const queryInput  = $('q');
+    const clearBtn    = $('clearBtn');
+
+    const menuMask    = $('menuMask');   // 长按/右键菜单
+    const sheetMask   = $('mask');       // 添加/编辑弹窗
+    const nameInput   = $('fName');
+    const urlInput    = $('fUrl');
+    const iconBox     = $('icoBox');
+    const fileInput   = $('fFile');
+
+    const moveBar     = $('mvBar');      // 移动模式底部栏
+    const moveLeftBtn = $('mvL');
+    const moveRightBtn = $('mvR');
+
+    /* ---------- 小工具 ---------- */
+    const vibrate = ms => navigator.vibrate && navigator.vibrate(ms);
+
+    /* 跳转（稍微延迟一下，让按压动画能先播完） */
+    function go(url) {
+      setTimeout(() => { location.href = url; }, 30);
+    }
+
+    /* 在新标签页打开；被拦截时退回当前页跳转 */
+    function openInNewTab(url) {
+      window.open(url, '_blank') || go(url);
+    }
+
+    /* 取主机名：'https://www.a.com/x' -> 'a.com'；无效输入返回 '' */
+    function hostOf(url) {
+      try {
+        const full = SCHEME_RE.test(url) ? url : 'https://' + url;
+        return new URL(full).hostname.replace(/^www\./, '');
+      } catch (e) {
+        return '';
+      }
+    }
+
+    /* 字符串 -> 0~359 的色相，保证同一个名字总是同一种颜色 */
+    function hueOf(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (31 * h + str.charCodeAt(i)) % 360;
+      return h;
+    }
+
+    /* 输入的是网址（而不是搜索词）？ 例：https://a.com、a.com/x */
+    function looksLikeUrl(text) {
+      return /^https?:\/\/\S+$/i.test(text) || /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(text);
+    }
+
+    /* ---------- 图标 ---------- */
+    /* 没有图标时的占位：彩色圆 + 首字母 */
+    function makeLetter(text, colorSeed) {
+      const el = document.createElement('span');
+      el.className = 'letter';
+      el.style.background = `hsl(${hueOf(colorSeed || text || 'x')},55%,55%)`;
+      el.textContent = (text || '?').trim().charAt(0).toUpperCase() || '?';
+      return el;
+    }
+
+    /* 依次尝试多个 favicon 源，全部失败则调用 onFail */
+    function loadFavicon(url, onLoad, onFail) {
+      const host = hostOf(url);
+      if (!host) { onFail(); return; }
+
+      const sources = [`https://${host}/favicon.ico`, `https://favicon.im/${host}`];
+      let next = 0;
+
+      (function tryNext() {
+        if (next >= sources.length) { onFail(); return; }
+
+        const img = document.createElement('img');
+        let settled = false;
+        const settle = fn => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          fn();
+        };
+        // 超时就放弃当前源，换下一个
+        const timer = setTimeout(() => {
+          settle(() => { img.removeAttribute('src'); tryNext(); });
+        }, FAVICON_TIMEOUT_MS);
+
+        img.onload  = () => settle(() => onLoad(img));
+        img.onerror = () => settle(tryNext);
+        img.src = sources[next++];
+      })();
+    }
+
+    /* 构建某个快捷方式的图标：自选图片 > 在线 favicon > 首字母占位 */
+    function buildIcon(item) {
+      const wrap = document.createElement('div');
+      const icon = item.icon || { type: 'auto' };
+
+      if (icon.type === 'custom' && icon.value) {
+        const img = document.createElement('img');
+        img.alt = '';
+        img.src = icon.value;
+        wrap.appendChild(img);
+        return wrap;
+      }
+
+      // 先放首字母占位，favicon 加载成功后再替换掉
+      const host = hostOf(item.url);
+      const letter = makeLetter(item.name || host, item.name || host || 'x');
+      wrap.appendChild(letter);
+
+      loadFavicon(item.url, img => {
+        img.alt = '';
+        if (letter.parentNode) letter.parentNode.removeChild(letter);
+        wrap.appendChild(img);
+      }, () => {});
+
+      return wrap;
+    }
+
+    /* ---------- 渲染：logo / 引擎按钮 / 快捷方式网格 ---------- */
+    function renderBrand() {
+      brandEl.innerHTML = `<div class="logo ${state.engine}">${LOGOS[state.engine]}</div>`;
+    }
+
+    function renderEngines() {
+      enginesEl.innerHTML = '';
+      Object.keys(ENGINES).forEach(key => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'eng' + (key === state.engine ? ' on' : '');
+        btn.textContent = ENGINES[key].name;
+        btn.onclick = () => {
+          state.engine = key;
+          saveState();
+          renderBrand();
+          renderEngines();
+        };
+        enginesEl.appendChild(btn);
+      });
+    }
+
+    /* 一个快捷方式 = 圆形图标 + 名称。
+     * 点击：打开；Ctrl/Shift/Cmd+点击、中键：新标签页；
+     * 触屏长按、鼠标右键：弹出菜单 */
+    function buildTile(item) {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.dataset.sid = item.id;
+
+      const circle = document.createElement('div');
+      circle.className = 'circle';
+      circle.appendChild(buildIcon(item));
+      tile.appendChild(circle);
+
+      const label = document.createElement('div');
+      label.className = 'name';
+      label.textContent = item.name || hostOf(item.url);
+      tile.appendChild(label);
+
+      let pressing = false;     // 手指是否还按着
+      let pressTimer = null;
+      let menuJustOpened = false; // 刚弹出过菜单：吞掉随后那次 click，避免误打开网址
+
+      const cancelPress = () => { pressing = false; clearTimeout(pressTimer); };
+
+      tile.addEventListener('pointerdown', ev => {
+        menuJustOpened = false;   // 新的一次按下，清掉上次的标记
+        if (moving || ev.pointerType === 'mouse') return; // 鼠标不做长按，用右键
+        pressing = true;
+        pressTimer = setTimeout(() => {
+          if (!pressing) return;
+          menuJustOpened = true;
+          vibrate(8);
+          openMenu(item.id);
+        }, LONG_PRESS_MS);
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(type => {
+        tile.addEventListener(type, cancelPress);
+      });
+
+      tile.addEventListener('click', ev => {
+        if (moving) return;
+        if (menuJustOpened) { menuJustOpened = false; return; }
+        if (ev.ctrlKey || ev.metaKey || ev.shiftKey) { openInNewTab(item.url); return; }
+        go(item.url);
+      });
+
+      // 中键：先阻止"自动滚动"，再在 auxclick 里开新标签页
+      tile.addEventListener('mousedown', ev => { if (ev.button === 1) ev.preventDefault(); });
+      tile.addEventListener('auxclick', ev => {
+        if (moving || ev.button !== 1) return;
+        ev.preventDefault();
+        openInNewTab(item.url);
+      });
+
+      tile.addEventListener('contextmenu', ev => {
+        ev.preventDefault();
+        if (moving) return;
+        menuJustOpened = true;
+        openMenu(item.id);
+      });
+
+      return tile;
+    }
+
+    /* 网格末尾的"+ 添加"按钮；移动模式下不显示 */
+    function buildAddTile() {
+      const tile = document.createElement('div');
+      tile.className = 'tile add';
+
+      const circle = document.createElement('div');
+      circle.className = 'circle';
+      circle.textContent = '+';
+      tile.appendChild(circle);
+
+      const label = document.createElement('div');
+      label.className = 'name';
+      label.textContent = '添加';
+      tile.appendChild(label);
+
+      tile.onclick = () => openSheet(null);
+      return tile;
+    }
+
+    function renderGrid() {
+      gridEl.innerHTML = '';
+      state.shortcuts.forEach(item => gridEl.appendChild(buildTile(item)));
+      if (!moving) gridEl.appendChild(buildAddTile());
+    }
+
+    function render() {
+      renderBrand();
+      renderEngines();
+      renderGrid();
+    }
+
+    /* ---------- 长按/右键菜单 ---------- */
+    let menuId = null; // 当前菜单对应的快捷方式 id
+
+    function findShortcut(id) {
+      return state.shortcuts.find(item => item.id === id);
+    }
+
+    function openMenu(id) {
+      const item = findShortcut(id);
+      if (!item) return;
+      menuId = id;
+      $('menuTitle').textContent = (item.name || hostOf(item.url)) + ' · ' + item.url;
+      $('menuActions').hidden = false;
+      $('mMove').hidden = state.shortcuts.length < 2; // 只有一个时没法排序
+      menuMask.hidden = false;
+    }
+
+    function closeMenu() {
+      menuMask.hidden = true;
+      menuId = null;
+    }
+
+    menuMask.addEventListener('click', ev => {
+      if (ev.target === menuMask) closeMenu(); // 点空白处关闭
+    });
+
+    $('mNewTab').onclick = () => {
+      const item = findShortcut(menuId);
+      closeMenu();
+      if (!item) return;
+      // 先同步开一个空白页（不会被拦截），再改它的地址
+      const win = window.open('about:blank', '_blank');
+      if (!win) { go(item.url); return; }
+      setTimeout(() => {
+        try { win.location.href = item.url; } catch (e) { go(item.url); }
+      }, 40);
+    };
+
+    $('mMove').onclick = ev => {
+      ev.stopPropagation();
+      startMove();
+    };
+
+    $('mEdit').onclick = () => {
+      const item = findShortcut(menuId);
+      closeMenu();
+      if (item) openSheet(item);
+    };
+
+    $('mDel').onclick = () => {
+      const id = menuId;
+      closeMenu();
+      if (!id) return;
+      state.shortcuts = state.shortcuts.filter(item => item.id !== id);
+      saveState();
+      removeTile(id);
+    };
+
+    /* ---------- 添加/编辑弹窗 ---------- */
+    let editingId = null;   // 正在编辑的 id；null 表示新增
+    let iconMode = 'auto';  // 'auto'（自动图标）或 'custom'（自选图片）
+    let customIcon = '';    // 自选图片的 dataURL
+    let iconToken = 0;      // 每次刷新预览 +1，用来丢弃过期的异步结果
+    let urlDebounce = null;
+
+    /* 刷新弹窗里的图标预览 */
+    function refreshIconPreview() {
+      iconBox.innerHTML = '';
+      $('defaultBtn').classList.toggle('on', iconMode !== 'custom');
+      $('pickBtn').classList.toggle('on', iconMode === 'custom');
+
+      // 自选图片：直接显示
+      if (iconMode === 'custom' && customIcon) {
+        const img = document.createElement('img');
+        img.src = customIcon;
+        img.alt = '';
+        iconBox.appendChild(img);
+        return;
+      }
+
+      const url = urlInput.value.trim();
+      const host = hostOf(url);
+
+      // 编辑且网址没改：直接复用网格里已加载好的图标
+      if (editingId) {
+        const current = findShortcut(editingId);
+        if (current && current.url === url) {
+          const circle = tileEl(editingId)?.querySelector('.circle');
+          if (circle && circle.firstChild) {
+            iconBox.appendChild(circle.firstChild.cloneNode(true));
+            return;
+          }
+        }
+      }
+
+      // 否则：先放首字母占位，再异步拉取 favicon
+      iconBox.appendChild(makeLetter(nameInput.value || host, host));
+      if (!host) return;
+
+      const token = ++iconToken;
+      loadFavicon(url, img => {
+        if (token !== iconToken) return; // 期间输入又变了，丢弃
+        iconBox.innerHTML = '';
+        img.alt = '';
+        iconBox.appendChild(img);
+      }, () => {});
+    }
+
+    function openSheet(item) {
+      editingId = item ? item.id : null;
+      $('sheetTitle').textContent = item ? '编辑快捷方式' : '添加快捷方式';
+      nameInput.value = (item && item.name) || '';
+      urlInput.value = item ? item.url : '';
+
+      const hasCustom = item && item.icon && item.icon.type === 'custom';
+      iconMode = hasCustom && item.icon.value ? 'custom' : 'auto';
+      customIcon = hasCustom ? item.icon.value : '';
+
+      refreshIconPreview();
+      sheetMask.hidden = false;
+      if (!item) setTimeout(() => urlInput.focus(), 150); // 新增时直接聚焦网址框
+    }
+
+    function closeSheet() {
+      sheetMask.hidden = true;
+      editingId = null;
+      customIcon = '';
+      iconMode = 'auto';
+    }
+
+    sheetMask.addEventListener('click', ev => {
+      if (ev.target === sheetMask) closeSheet();
+    });
+    $('cancelBtn').onclick = closeSheet;
+
+    // 网址/名称变化 -> 刷新预览（网址输入做 220ms 防抖）
+    urlInput.addEventListener('input', () => {
+      if (iconMode !== 'auto') return;
+      clearTimeout(urlDebounce);
+      urlDebounce = setTimeout(refreshIconPreview, 220);
+    });
+    nameInput.addEventListener('input', () => {
+      // 网址还没解析出域名时，占位字母跟着名称走
+      if (iconMode === 'auto' && !hostOf(urlInput.value.trim())) refreshIconPreview();
+    });
+
+    $('defaultBtn').onclick = () => {
+      customIcon = '';
+      iconMode = 'auto';
+      refreshIconPreview();
+    };
+
+    $('pickBtn').onclick = () => fileInput.click();
+
+    /* 选图后：居中裁成正方形，缩到 128×128，存成 PNG dataURL */
+    fileInput.addEventListener('change', function () {
+      const file = this.files && this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const image = new Image();
+        image.onload = () => {
+          const SIZE = 128;
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = SIZE;
+          const side = Math.min(image.width, image.height);
+          canvas.getContext('2d').drawImage(
+            image,
+            (image.width - side) / 2, (image.height - side) / 2, side, side, // 源：中心正方形
+            0, 0, SIZE, SIZE                                                  // 目标：整个画布
+          );
+          customIcon = canvas.toDataURL('image/png');
+          iconMode = 'custom';
+          refreshIconPreview();
+        };
+        image.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+      this.value = ''; // 允许重复选择同一张图
+    });
+
+    $('saveBtn').onclick = () => {
+      let url = urlInput.value.trim();
+      if (!url) { urlInput.focus(); return; }
+
+      if (!SCHEME_RE.test(url)) url = 'https://' + url;
+      try {
+        url = new URL(url).href;
+      } catch (e) {
+        urlInput.focus();
+        return;
+      }
+
+      const name = nameInput.value.trim() || hostOf(url) || url;
+      const icon = iconMode === 'custom' && customIcon
+        ? { type: 'custom', value: customIcon }
+        : { type: 'auto' };
+
+      if (editingId) {
+        const item = findShortcut(editingId);
+        if (item) {
+          const iconChanged = url !== item.url
+            || JSON.stringify(icon) !== JSON.stringify(item.icon || { type: 'auto' });
+          item.name = name;
+          item.url = url;
+          item.icon = icon;
+          saveState();
+          refreshTileName(item);
+          if (iconChanged) refreshTileIcon(item);
+        }
+      } else {
+        const item = {
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          name,
+          url,
+          icon
+        };
+        state.shortcuts.push(item);
+        saveState();
+        insertTile(item);
+      }
+      closeSheet();
+    };
+
+    /* 回车保存（输入法选字时的回车不算） */
+    [nameInput, urlInput].forEach(input => {
+      input.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter' && !ev.isComposing && ev.keyCode !== 229) {
+          ev.preventDefault();
+          $('saveBtn').click();
+        }
+      });
+    });
+
+    /* ---------- 网格的局部更新（不整体重绘，避免图标重新加载） ---------- */
+    function tileEl(id) {
+      return [...gridEl.children].find(el => el.dataset && el.dataset.sid === id) || null;
+    }
+
+    function addTileEl() {
+      return gridEl.querySelector(':scope > .tile.add');
+    }
+
+    function refreshTileName(item) {
+      const label = tileEl(item.id)?.querySelector('.name');
+      if (label) label.textContent = item.name || hostOf(item.url);
+    }
+
+    function refreshTileIcon(item) {
+      const circle = tileEl(item.id)?.querySelector('.circle');
+      if (!circle) return;
+      circle.innerHTML = '';
+      circle.appendChild(buildIcon(item));
+    }
+
+    function insertTile(item) {
+      const tile = buildTile(item);
+      const addTile = addTileEl();
+      if (addTile) gridEl.insertBefore(tile, addTile); // 插在"+ 添加"前面
+      else gridEl.appendChild(tile);
+    }
+
+    function removeTile(id) {
+      const tile = tileEl(id);
+      if (tile && tile.parentNode) tile.parentNode.removeChild(tile);
+    }
+
+    /* 按 state.shortcuts 的顺序重排 DOM（只移动节点，不重建） */
+    function syncTileOrder() {
+      state.shortcuts.forEach(item => {
+        const tile = tileEl(item.id);
+        if (tile) gridEl.appendChild(tile);
+      });
+      const addTile = addTileEl();
+      if (addTile) gridEl.appendChild(addTile);
+    }
+
+    /* ---------- 移动模式：用 ← → 一格一格挪动选中的快捷方式 ---------- */
+    let moving = false;
+    let movingId = null;
+
+    function indexOfShortcut(id) {
+      return state.shortcuts.findIndex(item => item.id === id);
+    }
+
+    /* 到头了就禁用对应方向的按钮 */
+    function updateMoveButtons() {
+      const i = indexOfShortcut(movingId);
+      moveLeftBtn.disabled = i <= 0;
+      moveRightBtn.disabled = i < 0 || i >= state.shortcuts.length - 1;
+    }
+
+    function startMove() {
+      const id = menuId;
+      closeMenu();
+      if (!id || state.shortcuts.length < 2) return;
+
+      moving = true;
+      movingId = id;
+      document.body.classList.add('moving');
+      moveBar.hidden = false;
+      gridEl.style.minHeight = gridEl.offsetHeight + 'px'; // 隐藏"+ 添加"后高度别抖
+
+      tileEl(id)?.classList.add('lift');
+      const addTile = addTileEl();
+      if (addTile) addTile.hidden = true;
+
+      updateMoveButtons();
+      vibrate(6);
+    }
+
+    function exitMove() {
+      if (!moving) return;
+      tileEl(movingId)?.classList.remove('lift');
+
+      moving = false;
+      movingId = null;
+      document.body.classList.remove('moving');
+      moveBar.hidden = true;
+      gridEl.style.minHeight = '';
+
+      const addTile = addTileEl();
+      if (addTile) addTile.hidden = false;
+    }
+
+    /* 与左/右邻居交换位置（direction = -1 或 +1） */
+    function moveStep(direction) {
+      if (!moving) return;
+      const from = indexOfShortcut(movingId);
+      const to = from + direction;
+      if (from < 0 || to < 0 || to >= state.shortcuts.length) return;
+
+      const list = state.shortcuts;
+      [list[from], list[to]] = [list[to], list[from]];
+      saveState();
+      syncTileOrder();
+      updateMoveButtons();
+      vibrate(8);
+    }
+
+    moveLeftBtn.onclick = ev => { ev.stopPropagation(); ev.preventDefault(); moveStep(-1); };
+    moveRightBtn.onclick = ev => { ev.stopPropagation(); ev.preventDefault(); moveStep(1); };
+
+    // 移动模式下，点底部栏以外的任何地方 = 完成（捕获阶段拦截，避免误触网址）
+    document.addEventListener('click', ev => {
+      if (!moving || moveBar.contains(ev.target)) return;
+      ev.stopPropagation();
+      ev.preventDefault();
+      exitMove();
+    }, true);
+
+    /* ---------- 搜索框 ---------- */
+    searchForm.addEventListener('submit', ev => {
+      ev.preventDefault();
+      const text = queryInput.value.trim();
+      if (!text) { queryInput.focus(); return; }
+
+      if (looksLikeUrl(text)) {
+        go(/^https?:\/\//i.test(text) ? text : 'https://' + text);
+      } else {
+        go(ENGINES[state.engine].search + encodeURIComponent(text));
+      }
+    });
+
+    queryInput.addEventListener('input', () => {
+      clearBtn.style.display = queryInput.value ? 'block' : 'none';
+    });
+
+    clearBtn.onclick = () => {
+      queryInput.value = '';
+      clearBtn.style.display = 'none';
+      queryInput.focus();
+    };
+
+    /* ---------- 全局键盘快捷键（主要给 PC 用） ---------- */
+    document.addEventListener('keydown', ev => {
+      const key = ev.key;
+      const inInput = ev.target && ev.target.tagName === 'INPUT';
+
+      // Esc：按"最上层"的顺序关闭 移动模式 > 添加弹窗 > 菜单
+      if (key === 'Escape' || key === 'Esc') {
+        if (moving) exitMove();
+        else if (!sheetMask.hidden) closeSheet();
+        else if (!menuMask.hidden) closeMenu();
+        return;
+      }
+
+      // 移动模式：← → 挪动，Enter 完成
+      if (moving) {
+        if (inInput) return;
+        if (key === 'ArrowLeft')  { ev.preventDefault(); moveStep(-1); }
+        if (key === 'ArrowRight') { ev.preventDefault(); moveStep(1); }
+        if (key === 'Enter')      { ev.preventDefault(); exitMove(); }
+        return;
+      }
+
+      // "/"：聚焦搜索框（没有弹窗、且不在输入框里时）
+      if (key === '/' && !inInput && sheetMask.hidden && menuMask.hidden
+          && !ev.ctrlKey && !ev.metaKey && !ev.altKey) {
+        ev.preventDefault();
+        queryInput.focus();
+      }
+    });
+
+    /* ---------- 启动 ---------- */
+    loadState();
+    render();
+
+    // 有鼠标的设备：打开页面就能直接打字搜索
+    if (window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      queryInput.focus();
+    }
+  </script>
+</body>
+</html>
