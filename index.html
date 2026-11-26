@@ -917,7 +917,12 @@
     const TOAST_MS = 3200;           // 提示条显示时长
 
     /* 搜索框里"像网址"的判断：主机[:端口][/路径]，主机可以是 localhost、IPv4、[IPv6] 或域名 */
-    const HOST_RE = /^(localhost|(?:\d{1,3}\.){3}\d{1,3}|\[[0-9a-f:.]+\]|(?:[a-z0-9-]+\.)+[a-z]{2,})(?::(\d{1,5}))?([/?#]\S*)?$/i;
+    const OCTET = /(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)/.source;   // 0-255
+    const IPV4 = `(?:${OCTET}\\.){3}${OCTET}`;
+    const HOST_RE = new RegExp(
+      `^(localhost|${IPV4}|\\[[0-9a-f:.]+\\]|(?:[a-z0-9-]+\\.)+[a-z]{2,})(?::(\\d{1,5}))?([/?#]\\S*)?$`, 'i');
+    /* 没带方括号的 IPv6（::1、2001:db8::1）：至少两个冒号、只含十六进制和冒号 */
+    const BARE_IPV6_RE = /^(?=(?:[^:]*:){2})[0-9a-f:]+(?:%\w+)?$/i;
     /* 看起来像域名后缀、其实多半是文件名/语言名的（node.js、main.py、readme.md…），不当网址 */
     const NOT_TLDS = new Set((
       'js mjs cjs ts tsx jsx json css scss less html htm xml php cpp hpp java cs txt log exe dll ' +
@@ -955,7 +960,17 @@
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (saved && ENGINES[saved.engine]) state.engine = saved.engine;
-        if (saved && Array.isArray(saved.shortcuts)) state.shortcuts = saved.shortcuts;
+        if (saved && Array.isArray(saved.shortcuts)) {
+          // 逐项校验：丢掉坏数据和 javascript: 之类的网址，保留原 id（去重）
+          const seen = new Set();
+          state.shortcuts = saved.shortcuts.slice(0, MAX_SHORTCUTS).map(raw => {
+            const item = sanitizeShortcut(raw);
+            if (!item) return null;
+            if (typeof raw.id === 'string' && raw.id && !seen.has(raw.id)) item.id = raw.id;
+            seen.add(item.id);
+            return item;
+          }).filter(Boolean);
+        }
       } catch (e) { /* 数据损坏或存储不可用：用默认值 */ }
     }
 
@@ -1059,16 +1074,18 @@
     /* 把"主机[:端口][/路径]"形式的输入拆开检查，并决定没写协议时默认走 http 还是 https。
      * 不像网址（或主机/端口不合法）返回 null */
     function analyzeHost(input) {
+      if (BARE_IPV6_RE.test(input) && input.includes('::') || /^(?:[0-9a-f]{1,4}:){7}[0-9a-f]{1,4}$/i.test(input)) {
+        return { scheme: 'http', bareIPv6: true };
+      }
       const m = HOST_RE.exec(input);
       if (!m) return null;
 
       const host = m[1].toLowerCase();
       const port = m[2];
-      const isIPv4 = /^\d+(\.\d+){3}$/.test(host);
+      const isIPv4 = /^\d+(\.\d+){3}$/.test(host); // 已被 HOST_RE 限定为合法 0-255 的四段
       const isIPv6 = host.startsWith('[');
       const isLocal = host === 'localhost' || /\.(local|lan|home|internal|arpa)$/.test(host);
 
-      if (isIPv4 && host.split('.').some(n => Number(n) > 255)) return null;
       if (port && (Number(port) < 1 || Number(port) > 65535)) return null;
       if (!isIPv4 && !isIPv6 && !isLocal && NOT_TLDS.has(host.split('.').pop())) return null;
 
@@ -1081,6 +1098,7 @@
     function withScheme(input) {
       if (SCHEME_RE.test(input)) return input;
       const info = analyzeHost(input);
+      if (info && info.bareIPv6) return 'http://[' + input + ']';
       return (info ? info.scheme : 'https') + '://' + input;
     }
 
@@ -1169,23 +1187,40 @@
 
     /* ---------- 渲染：logo / 引擎按钮 / 快捷方式网格 ---------- */
     function renderBrand() {
-      brandEl.innerHTML = `<div class="logo ${state.engine}">${LOGOS[state.engine]}</div>`;
+      let logo = brandEl.firstElementChild;
+      if (!logo) {
+        logo = document.createElement('div');
+        brandEl.appendChild(logo);
+      }
+      if (logo.dataset.engine === state.engine) return; // 没变就不动
+      logo.dataset.engine = state.engine;
+      logo.className = 'logo ' + state.engine;
+      logo.innerHTML = LOGOS[state.engine];
     }
 
+    /* 引擎按钮只建一次；切换时只改高亮，不重建 */
+    const engineBtns = {};
     function renderEngines() {
-      enginesEl.innerHTML = '';
-      Object.keys(ENGINES).forEach(key => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'eng' + (key === state.engine ? ' on' : '');
-        btn.textContent = ENGINES[key].name;
-        btn.onclick = () => {
-          state.engine = key;
-          saveState();
-          renderBrand();
-          renderEngines();
-        };
-        enginesEl.appendChild(btn);
+      if (!enginesEl.children.length) {
+        Object.keys(ENGINES).forEach(key => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = ENGINES[key].name;
+          btn.onclick = () => {
+            if (state.engine === key) return;
+            state.engine = key;
+            saveState();
+            renderBrand();
+            renderEngines();
+          };
+          engineBtns[key] = btn;
+          enginesEl.appendChild(btn);
+        });
+      }
+      Object.keys(engineBtns).forEach(key => {
+        const on = key === state.engine;
+        engineBtns[key].className = 'eng' + (on ? ' on' : '');
+        engineBtns[key].setAttribute('aria-pressed', on ? 'true' : 'false');
       });
     }
 
@@ -1769,6 +1804,9 @@
       }
       if (!data || typeof data !== 'object' || data.app !== BACKUP_APP) {
         throw new Error('不是本主页导出的备份文件');
+      }
+      if (!Number.isInteger(data.version) || data.version < 1) {
+        throw new Error('备份文件缺少有效的版本号');
       }
       if (data.version > BACKUP_VERSION) {
         throw new Error('备份文件版本较新，请先更新主页');
