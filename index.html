@@ -788,6 +788,16 @@
         color: var(--acc);
       }
     }
+
+    /* ---------- 键盘焦点：用 Tab 键选中快捷方式时显示轮廓 ---------- */
+    .tile {
+      outline: none;
+    }
+
+    .tile:focus-visible .circle {
+      outline: 2px solid var(--acc);
+      outline-offset: 3px;
+    }
   </style>
 </head>
 <body>
@@ -808,9 +818,9 @@
         <circle cx="11" cy="11" r="7"/>
         <path d="M16.5 16.5 21 21"/>
       </svg>
-      <input id="q" type="text" placeholder="搜索或输入网址" enterkeyhint="go">
+      <input id="q" type="text" placeholder="搜索，或输入网址回车直达" enterkeyhint="go">
       <button type="button" id="clearBtn" aria-label="清空">✕</button>
-      <button type="submit" class="go">搜索</button>
+      <button type="button" class="go" id="searchBtn" title="用当前引擎搜索（回车则直达网址）">搜索</button>
     </form>
 
     <section class="desk">
@@ -906,6 +916,15 @@
     const SCHEME_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
     const TOAST_MS = 3200;           // 提示条显示时长
 
+    /* 搜索框里"像网址"的判断：主机[:端口][/路径]，主机可以是 localhost、IPv4、[IPv6] 或域名 */
+    const HOST_RE = /^(localhost|(?:\d{1,3}\.){3}\d{1,3}|\[[0-9a-f:.]+\]|(?:[a-z0-9-]+\.)+[a-z]{2,})(?::(\d{1,5}))?([/?#]\S*)?$/i;
+    /* 看起来像域名后缀、其实多半是文件名/语言名的（node.js、main.py、readme.md…），不当网址 */
+    const NOT_TLDS = new Set((
+      'js mjs cjs ts tsx jsx json css scss less html htm xml php cpp hpp java cs txt log exe dll ' +
+      'doc docx xls xlsx ppt pptx png jpg jpeg gif svg ico yml yaml toml ini conf sql lock bak tmp ' +
+      'gz tar rar py md sh rs go rb kt'
+    ).split(' '));
+
     /* 导出/导入 */
     const BACKUP_APP = 'start-page';       // 备份文件的标识，导入时用来认"自家"文件
     const BACKUP_VERSION = 1;              // 备份格式版本，以后改结构时靠它兼容
@@ -995,6 +1014,17 @@
       return Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + (idSeq++).toString(36);
     }
 
+    /* 点遮罩空白处关闭弹窗。
+     * 但在弹窗里按下、拖到外面才松手（比如在输入框里拖选文字）不算，否则会丢掉正在填的内容 */
+    function closeOnBackdropClick(mask, close) {
+      let pressStartedInside = false;
+      mask.addEventListener('pointerdown', ev => { pressStartedInside = ev.target !== mask; });
+      mask.addEventListener('click', ev => {
+        if (ev.target === mask && !pressStartedInside) close();
+        pressStartedInside = false;
+      });
+    }
+
     /* 用来判断"是不是同一个网址"的规范化形式 */
     function urlKey(url) {
       try { return new URL(url).href; } catch (e) { return url; }
@@ -1013,8 +1043,7 @@
     /* 取主机名：'https://www.a.com/x' -> 'a.com'；无效输入返回 '' */
     function hostOf(url) {
       try {
-        const full = SCHEME_RE.test(url) ? url : 'https://' + url;
-        return new URL(full).hostname.replace(/^www\./, '');
+        return new URL(withScheme(url)).hostname.replace(/^www\./, '');
       } catch (e) {
         return '';
       }
@@ -1027,9 +1056,48 @@
       return h;
     }
 
-    /* 输入的是网址（而不是搜索词）？ 例：https://a.com、a.com/x */
-    function looksLikeUrl(text) {
-      return /^https?:\/\/\S+$/i.test(text) || /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(text);
+    /* 把"主机[:端口][/路径]"形式的输入拆开检查，并决定没写协议时默认走 http 还是 https。
+     * 不像网址（或主机/端口不合法）返回 null */
+    function analyzeHost(input) {
+      const m = HOST_RE.exec(input);
+      if (!m) return null;
+
+      const host = m[1].toLowerCase();
+      const port = m[2];
+      const isIPv4 = /^\d+(\.\d+){3}$/.test(host);
+      const isIPv6 = host.startsWith('[');
+      const isLocal = host === 'localhost' || /\.(local|lan|home|internal|arpa)$/.test(host);
+
+      if (isIPv4 && host.split('.').some(n => Number(n) > 255)) return null;
+      if (port && (Number(port) < 1 || Number(port) > 65535)) return null;
+      if (!isIPv4 && !isIPv6 && !isLocal && NOT_TLDS.has(host.split('.').pop())) return null;
+
+      // 本机/内网地址、带非 443 端口的，多半没有 HTTPS，默认走 http
+      const plainHttp = isIPv4 || isIPv6 || isLocal || (port && port !== '443');
+      return { scheme: plainHttp ? 'http' : 'https' };
+    }
+
+    /* 补全协议：已有协议原样返回；否则按 analyzeHost 的判断补 http:// 或 https:// */
+    function withScheme(input) {
+      if (SCHEME_RE.test(input)) return input;
+      const info = analyzeHost(input);
+      return (info ? info.scheme : 'https') + '://' + input;
+    }
+
+    /* 搜索框回车用：输入像网址就返回可直接打开的完整网址，否则返回 null（交给搜索引擎）
+     * 例：google.com、192.168.1.10:5000、localhost:3000、https://a.com/x -> 网址
+     *     google、node.js、site:a.com、hello world -> null */
+    function resolveUrl(text) {
+      const input = text.trim();
+      if (!input || /\s/.test(input)) return null;
+
+      const hasScheme = /^https?:\/\//i.test(input);
+      if (!hasScheme && !analyzeHost(input)) return null;
+      try {
+        return new URL(hasScheme ? input : withScheme(input)).href;
+      } catch (e) {
+        return null;
+      }
     }
 
     /* ---------- 图标 ---------- */
@@ -1128,6 +1196,9 @@
       const tile = document.createElement('div');
       tile.className = 'tile';
       tile.dataset.sid = item.id;
+      tile.tabIndex = 0;                 // 可用 Tab 键聚焦
+      tile.setAttribute('role', 'link');
+      tile.title = `${item.name || hostOf(item.url)} · ${item.url}`;
 
       const circle = document.createElement('div');
       circle.className = 'circle';
@@ -1160,11 +1231,24 @@
         tile.addEventListener(type, cancelPress);
       });
 
+      // 打开网址：Ctrl/Shift/Cmd 修饰键 = 新标签页
+      const open = ev => {
+        if (ev.ctrlKey || ev.metaKey || ev.shiftKey) openInNewTab(item.url);
+        else go(item.url);
+      };
+
       tile.addEventListener('click', ev => {
         if (moving) return;
         if (menuJustOpened) { menuJustOpened = false; return; }
-        if (ev.ctrlKey || ev.metaKey || ev.shiftKey) { openInNewTab(item.url); return; }
-        go(item.url);
+        open(ev);
+      });
+
+      // 键盘：聚焦后按 Enter / 空格打开（菜单键或 Shift+F10 走下面的 contextmenu）
+      tile.addEventListener('keydown', ev => {
+        if (moving || (ev.key !== 'Enter' && ev.key !== ' ')) return;
+        ev.preventDefault();
+        menuJustOpened = false;
+        open(ev);
       });
 
       // 中键：先阻止"自动滚动"，再在 auxclick 里开新标签页
@@ -1189,6 +1273,8 @@
     function buildAddTile() {
       const tile = document.createElement('div');
       tile.className = 'tile add';
+      tile.tabIndex = 0;
+      tile.setAttribute('role', 'button');
 
       const circle = document.createElement('div');
       circle.className = 'circle';
@@ -1201,6 +1287,11 @@
       tile.appendChild(label);
 
       tile.onclick = () => openSheet(null);
+      tile.addEventListener('keydown', ev => {
+        if (ev.key !== 'Enter' && ev.key !== ' ') return;
+        ev.preventDefault();
+        openSheet(null);
+      });
       return tile;
     }
 
@@ -1238,9 +1329,7 @@
       menuId = null;
     }
 
-    menuMask.addEventListener('click', ev => {
-      if (ev.target === menuMask) closeMenu(); // 点空白处关闭
-    });
+    closeOnBackdropClick(menuMask, closeMenu); // 点空白处关闭
 
     $('mNewTab').onclick = () => {
       const item = findShortcut(menuId);
@@ -1283,6 +1372,7 @@
 
     /* 刷新弹窗里的图标预览 */
     function refreshIconPreview() {
+      const token = ++iconToken; // 每次刷新都让之前未完成的异步结果作废
       iconBox.innerHTML = '';
       $('defaultBtn').classList.toggle('on', iconMode !== 'custom');
       $('pickBtn').classList.toggle('on', iconMode === 'custom');
@@ -1315,7 +1405,6 @@
       iconBox.appendChild(makeLetter(nameInput.value || host, host));
       if (!host) return;
 
-      const token = ++iconToken;
       loadFavicon(url, img => {
         if (token !== iconToken) return; // 期间输入又变了，丢弃
         iconBox.innerHTML = '';
@@ -1340,15 +1429,14 @@
     }
 
     function closeSheet() {
+      iconToken++; // 弹窗关了，未完成的图标加载作废
       sheetMask.hidden = true;
       editingId = null;
       customIcon = '';
       iconMode = 'auto';
     }
 
-    sheetMask.addEventListener('click', ev => {
-      if (ev.target === sheetMask) closeSheet();
-    });
+    closeOnBackdropClick(sheetMask, closeSheet);
     $('cancelBtn').onclick = closeSheet;
 
     // 网址/名称变化 -> 刷新预览（网址输入做 220ms 防抖）
@@ -1392,8 +1480,10 @@
           iconMode = 'custom';
           refreshIconPreview();
         };
+        image.onerror = () => showToast('无法读取这张图片，换一张试试');
         image.src = reader.result;
       };
+      reader.onerror = () => showToast('无法读取这张图片，换一张试试');
       reader.readAsDataURL(file);
       this.value = ''; // 允许重复选择同一张图
     });
@@ -1402,7 +1492,12 @@
       let url = urlInput.value.trim();
       if (!url) { urlInput.focus(); return; }
 
-      if (!SCHEME_RE.test(url)) url = 'https://' + url;
+      if (!editingId && state.shortcuts.length >= MAX_SHORTCUTS) {
+        showToast(`最多只能添加 ${MAX_SHORTCUTS} 个快捷方式`);
+        return;
+      }
+
+      url = withScheme(url);
       try {
         url = new URL(url).href;
       } catch (e) {
@@ -1599,9 +1694,7 @@
 
     dataBtn.onclick = openDataSheet;
     $('dataCloseBtn').onclick = closeDataSheet;
-    dataMask.addEventListener('click', ev => {
-      if (ev.target === dataMask) closeDataSheet();
-    });
+    closeOnBackdropClick(dataMask, closeDataSheet);
     $('modeMerge').onclick = () => setImportMode('merge');
     $('modeReplace').onclick = () => setImportMode('replace');
 
@@ -1647,8 +1740,7 @@
     function sanitizeShortcut(raw) {
       if (!raw || typeof raw.url !== 'string') return null;
 
-      let url = raw.url.trim();
-      if (!SCHEME_RE.test(url)) url = 'https://' + url;
+      let url = withScheme(raw.url.trim());
       try {
         const parsed = new URL(url);
         // 只允许 http/https，挡掉 javascript: 之类
@@ -1776,18 +1868,23 @@
       importFiles(dataFile.files, importMode).finally(() => { dataFile.value = ''; });
     });
 
-    /* ---------- 搜索框 ---------- */
-    searchForm.addEventListener('submit', ev => {
-      ev.preventDefault();
+    /* ---------- 搜索框 ----------
+     * 回车（含手机键盘的"前往"键）：像网址就直达，否则用当前引擎搜索
+     * 点"搜索"按钮：不管内容是什么，一律用当前引擎搜索（比如就是想搜 google.com） */
+    function runSearch(forceSearch) {
       const text = queryInput.value.trim();
       if (!text) { queryInput.focus(); return; }
 
-      if (looksLikeUrl(text)) {
-        go(/^https?:\/\//i.test(text) ? text : 'https://' + text);
-      } else {
-        go(ENGINES[state.engine].search + encodeURIComponent(text));
-      }
+      const direct = forceSearch ? null : resolveUrl(text);
+      go(direct || ENGINES[state.engine].search + encodeURIComponent(text));
+    }
+
+    // 表单只有一个输入框、没有提交按钮：回车会触发 submit，输入法的"前往"键也走这条路
+    searchForm.addEventListener('submit', ev => {
+      ev.preventDefault();
+      runSearch(false);
     });
+    $('searchBtn').onclick = () => runSearch(true);
 
     queryInput.addEventListener('input', () => {
       clearBtn.style.display = queryInput.value ? 'block' : 'none';
