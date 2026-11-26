@@ -692,9 +692,113 @@
         background: #fdeeed;
       }
     }
+
+    /* ---------- 数据管理：右上角齿轮、弹窗、提示条 ---------- */
+    .gear {
+      position: fixed;
+      top: calc(12px + env(safe-area-inset-top, 0px));
+      right: calc(12px + env(safe-area-inset-right, 0px));
+      z-index: 5;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.7);
+      color: var(--mut);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px -4px rgba(91,63,140,.4);
+    }
+
+    .gear svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .gear:active {
+      transform: scale(.92);
+    }
+
+    body.moving .gear {
+      display: none;
+    }
+
+    .data-info {
+      margin: -8px 0 14px;
+      font-size: 13.5px;
+      color: var(--mut);
+    }
+
+    .data-block {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .data-info + .data-block {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .data-label {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hint {
+      margin: 8px 0 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--mut);
+    }
+
+    .data-block .sheet-actions {
+      margin-top: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(28px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      max-width: min(90vw, 420px);
+      padding: 11px 18px;
+      border-radius: 14px;
+      background: rgba(50,32,80,.92);
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      z-index: 80;
+      pointer-events: none;
+      animation: fade .18s;
+    }
+
+    .toast[hidden] {
+      display: none;
+    }
+
+    @media (hover:hover) and (pointer:fine) {
+      .gear:hover {
+        background: #fff;
+        color: var(--acc);
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- 右上角：数据管理（导出/导入） -->
+  <button type="button" class="gear" id="dataBtn" aria-label="数据管理（导出/导入）" title="数据管理">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+
   <main>
     <div class="brand" id="brand"></div>
     <div class="engines" id="engines"></div>
@@ -740,6 +844,42 @@
     </div>
   </div>
 
+  <!-- 数据管理：导出 / 导入 -->
+  <div class="mask" id="dataMask" hidden>
+    <div class="sheet">
+      <h3>数据管理</h3>
+      <p class="data-info" id="dataInfo"></p>
+
+      <div class="data-block">
+        <div class="data-label">导出</div>
+        <p class="hint">把全部快捷方式（含自选图标）保存为一个 JSON 文件。</p>
+        <div class="sheet-actions">
+          <button type="button" class="primary" id="exportBtn">导出备份</button>
+        </div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-label">导入</div>
+        <div class="icon-row">
+          <button type="button" class="chip on" id="modeMerge">合并</button>
+          <button type="button" class="chip" id="modeReplace">覆盖</button>
+        </div>
+        <p class="hint" id="importHint"></p>
+        <div class="sheet-actions">
+          <button type="button" class="ghost" id="importBtn">选择备份文件…</button>
+        </div>
+        <input id="dataFile" type="file" accept=".json,application/json" hidden>
+      </div>
+
+      <div class="sheet-actions">
+        <button type="button" class="ghost" id="dataCloseBtn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部提示条 -->
+  <div class="toast" id="toast" role="status" hidden></div>
+
   <!-- 长按 / 右键菜单 -->
   <div class="mask" id="menuMask" hidden>
     <div class="menu-sheet">
@@ -764,6 +904,15 @@
     const LONG_PRESS_MS = 520;      // 触屏长按多久弹出菜单
     const FAVICON_TIMEOUT_MS = 1800; // 单个 favicon 源的超时时间
     const SCHEME_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
+    const TOAST_MS = 3200;           // 提示条显示时长
+
+    /* 导出/导入 */
+    const BACKUP_APP = 'start-page';       // 备份文件的标识，导入时用来认"自家"文件
+    const BACKUP_VERSION = 1;              // 备份格式版本，以后改结构时靠它兼容
+    const MAX_SHORTCUTS = 200;             // 快捷方式总数上限
+    const MAX_FILE_BYTES = 8 * 1024 * 1024; // 单个备份文件大小上限
+    const MAX_ICON_CHARS = 300000;         // 单个自选图标（dataURL）长度上限
+    const ICON_DATA_RE = /^data:image\/(png|jpeg|webp|gif);base64,/i;
 
     /* 搜索引擎的 logo（内联 SVG，离线也能显示） */
     const LOGOS = {
@@ -791,10 +940,15 @@
       } catch (e) { /* 数据损坏或存储不可用：用默认值 */ }
     }
 
-    function saveState() {
+    /* 成功返回 true；失败（存储满了/被禁用）返回 false，默认会弹提示 */
+    function saveState({ silent = false } = {}) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) { /* 存储满了或被禁用：忽略 */ }
+        return true;
+      } catch (e) {
+        if (!silent) showToast('无法保存数据（存储空间不足或被禁用），建议先导出备份');
+        return false;
+      }
     }
 
     /* ---------- DOM 引用 ---------- */
@@ -814,12 +968,37 @@
     const iconBox     = $('icoBox');
     const fileInput   = $('fFile');
 
+    const dataBtn     = $('dataBtn');    // 右上角齿轮
+    const dataMask    = $('dataMask');   // 数据管理（导出/导入）弹窗
+    const dataFile    = $('dataFile');
+    const toastEl     = $('toast');
+
     const moveBar     = $('mvBar');      // 移动模式底部栏
     const moveLeftBtn = $('mvL');
     const moveRightBtn = $('mvR');
 
     /* ---------- 小工具 ---------- */
     const vibrate = ms => navigator.vibrate && navigator.vibrate(ms);
+
+    /* 底部提示条 */
+    let toastTimer = null;
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toastEl.hidden = true; }, TOAST_MS);
+    }
+
+    /* 生成快捷方式 id（时间 + 随机 + 序号，批量导入也不会重复） */
+    let idSeq = 0;
+    function newId() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + (idSeq++).toString(36);
+    }
+
+    /* 用来判断"是不是同一个网址"的规范化形式 */
+    function urlKey(url) {
+      try { return new URL(url).href; } catch (e) { return url; }
+    }
 
     /* 跳转（稍微延迟一下，让按压动画能先播完） */
     function go(url) {
@@ -1250,7 +1429,7 @@
         }
       } else {
         const item = {
-          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          id: newId(),
           name,
           url,
           icon
@@ -1389,6 +1568,214 @@
       exitMove();
     }, true);
 
+    /* ---------- 数据管理：导出 / 导入 ----------
+     * 备份文件是一个 JSON：
+     * { app, version, exportedAt, engine, shortcuts: [{ name, url, icon }] }
+     * 自选图标以 dataURL 内嵌；自动图标只记 { type: 'auto' }，导入后重新抓取。
+     * id 不导出，导入时重新生成。 */
+    let importMode = 'merge'; // 'merge'（合并去重）或 'replace'（覆盖）
+
+    const IMPORT_HINTS = {
+      merge:   '按网址去重，保留本地已有的；可一次选多个文件。',
+      replace: '用文件内容替换当前全部快捷方式（会先确认）；只能选一个文件。'
+    };
+
+    function setImportMode(mode) {
+      importMode = mode;
+      $('modeMerge').classList.toggle('on', mode === 'merge');
+      $('modeReplace').classList.toggle('on', mode === 'replace');
+      $('importHint').textContent = IMPORT_HINTS[mode];
+    }
+
+    function openDataSheet() {
+      $('dataInfo').textContent = `当前共 ${state.shortcuts.length} 个快捷方式`;
+      setImportMode('merge'); // 每次打开都回到更安全的"合并"
+      dataMask.hidden = false;
+    }
+
+    function closeDataSheet() {
+      dataMask.hidden = true;
+    }
+
+    dataBtn.onclick = openDataSheet;
+    $('dataCloseBtn').onclick = closeDataSheet;
+    dataMask.addEventListener('click', ev => {
+      if (ev.target === dataMask) closeDataSheet();
+    });
+    $('modeMerge').onclick = () => setImportMode('merge');
+    $('modeReplace').onclick = () => setImportMode('replace');
+
+    /* 本地日期，如 2026-11-26 */
+    function dateStamp() {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+
+    function exportData() {
+      if (!state.shortcuts.length) { showToast('还没有快捷方式可导出'); return; }
+
+      const payload = {
+        app: BACKUP_APP,
+        version: BACKUP_VERSION,
+        exportedAt: new Date().toISOString(),
+        engine: state.engine,
+        shortcuts: state.shortcuts.map(item => ({
+          name: item.name,
+          url: item.url,
+          icon: item.icon && item.icon.type === 'custom' && item.icon.value
+            ? { type: 'custom', value: item.icon.value }
+            : { type: 'auto' }
+        }))
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `launcher-backup-${dateStamp()}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 10000); // 给手机浏览器留足下载时间
+
+      showToast(`已导出 ${state.shortcuts.length} 个快捷方式`);
+    }
+
+    $('exportBtn').onclick = exportData;
+
+    /* 导入的文件是不可信输入：逐项清洗，不合格的丢掉。返回清洗后的新对象或 null */
+    function sanitizeShortcut(raw) {
+      if (!raw || typeof raw.url !== 'string') return null;
+
+      let url = raw.url.trim();
+      if (!SCHEME_RE.test(url)) url = 'https://' + url;
+      try {
+        const parsed = new URL(url);
+        // 只允许 http/https，挡掉 javascript: 之类
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+        url = parsed.href;
+      } catch (e) {
+        return null;
+      }
+
+      const name = typeof raw.name === 'string' ? raw.name.trim().slice(0, 100) : '';
+      const icon = raw.icon && raw.icon.type === 'custom' && typeof raw.icon.value === 'string'
+          && raw.icon.value.length <= MAX_ICON_CHARS && ICON_DATA_RE.test(raw.icon.value)
+        ? { type: 'custom', value: raw.icon.value }
+        : { type: 'auto' };
+
+      return { id: newId(), name: name || hostOf(url) || url, url, icon };
+    }
+
+    /* 解析一个备份文件的文本；格式不对就抛出带中文原因的 Error */
+    function parseBackup(text) {
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error('不是有效的 JSON 文件');
+      }
+      if (!data || typeof data !== 'object' || data.app !== BACKUP_APP) {
+        throw new Error('不是本主页导出的备份文件');
+      }
+      if (data.version > BACKUP_VERSION) {
+        throw new Error('备份文件版本较新，请先更新主页');
+      }
+      if (!Array.isArray(data.shortcuts)) {
+        throw new Error('文件里没有快捷方式数据');
+      }
+
+      const items = [];
+      let invalid = 0;
+      data.shortcuts.forEach(raw => {
+        const item = sanitizeShortcut(raw);
+        if (item) items.push(item); else invalid++;
+      });
+      return { engine: data.engine, items, invalid };
+    }
+
+    async function importFiles(fileList, mode) {
+      const files = [...fileList]; // 先复制：之后 input 会被清空
+      if (!files.length) return;
+      if (mode === 'replace' && files.length > 1) {
+        showToast('覆盖模式一次只能选一个文件');
+        return;
+      }
+
+      // 1) 读取并清洗所有文件
+      const incoming = [];
+      let invalid = 0;
+      let badFiles = 0;
+      let engine = null;
+      let firstError = '';
+      for (const file of files) {
+        try {
+          if (file.size > MAX_FILE_BYTES) throw new Error('文件太大（超过 8 MB）');
+          const parsed = parseBackup(await file.text());
+          incoming.push(...parsed.items);
+          invalid += parsed.invalid;
+          engine = engine || parsed.engine;
+        } catch (e) {
+          badFiles++;
+          firstError = firstError || e.message;
+        }
+      }
+      if (!incoming.length) {
+        showToast(firstError || (invalid ? `没有有效的快捷方式（${invalid} 个无效项）` : '文件里没有快捷方式'));
+        return;
+      }
+
+      // 2) 按网址去重，得出新的列表（覆盖模式从空列表开始）
+      const list = mode === 'replace' ? [] : state.shortcuts.slice();
+      const seen = new Set(list.map(item => urlKey(item.url)));
+      let added = 0;
+      let duplicates = 0;
+      let overLimit = 0;
+      for (const item of incoming) {
+        const key = urlKey(item.url);
+        if (seen.has(key)) duplicates++;
+        else if (list.length >= MAX_SHORTCUTS) overLimit++;
+        else { list.push(item); seen.add(key); added++; }
+      }
+
+      if (mode === 'merge' && !added) {
+        showToast(duplicates ? `没有新增，${duplicates} 个已存在` : '没有可导入的快捷方式');
+        return;
+      }
+      if (mode === 'replace'
+          && !confirm(`将用文件中的 ${added} 个快捷方式替换当前的 ${state.shortcuts.length} 个，确定吗？`)) {
+        return;
+      }
+
+      // 3) 应用并保存；保存失败就回滚
+      const backup = { engine: state.engine, shortcuts: state.shortcuts };
+      state.shortcuts = list;
+      if (mode === 'replace' && ENGINES[engine]) state.engine = engine; // 搜索引擎只在覆盖时恢复
+      if (!saveState({ silent: true })) {
+        state.engine = backup.engine;
+        state.shortcuts = backup.shortcuts;
+        showToast('存储空间不足，导入未生效');
+        return;
+      }
+      render();
+      closeDataSheet();
+
+      const parts = [mode === 'replace' ? `已覆盖，共 ${added} 个快捷方式` : `新增 ${added} 个`];
+      if (duplicates) parts.push(`跳过 ${duplicates} 个重复`);
+      if (overLimit) parts.push(`${overLimit} 个超出 ${MAX_SHORTCUTS} 个上限`);
+      if (invalid) parts.push(`忽略 ${invalid} 个无效项`);
+      if (badFiles) parts.push(`${badFiles} 个文件无法读取`);
+      showToast(parts.join('，'));
+    }
+
+    $('importBtn').onclick = () => {
+      dataFile.multiple = importMode === 'merge';
+      dataFile.click();
+    };
+    dataFile.addEventListener('change', () => {
+      importFiles(dataFile.files, importMode).finally(() => { dataFile.value = ''; });
+    });
+
     /* ---------- 搜索框 ---------- */
     searchForm.addEventListener('submit', ev => {
       ev.preventDefault();
@@ -1417,10 +1804,11 @@
       const key = ev.key;
       const inInput = ev.target && ev.target.tagName === 'INPUT';
 
-      // Esc：按"最上层"的顺序关闭 移动模式 > 添加弹窗 > 菜单
+      // Esc：按"最上层"的顺序关闭 移动模式 > 添加弹窗 > 数据弹窗 > 菜单
       if (key === 'Escape' || key === 'Esc') {
         if (moving) exitMove();
         else if (!sheetMask.hidden) closeSheet();
+        else if (!dataMask.hidden) closeDataSheet();
         else if (!menuMask.hidden) closeMenu();
         return;
       }
@@ -1435,7 +1823,7 @@
       }
 
       // "/"：聚焦搜索框（没有弹窗、且不在输入框里时）
-      if (key === '/' && !inInput && sheetMask.hidden && menuMask.hidden
+      if (key === '/' && !inInput && sheetMask.hidden && menuMask.hidden && dataMask.hidden
           && !ev.ctrlKey && !ev.metaKey && !ev.altKey) {
         ev.preventDefault();
         queryInput.focus();
