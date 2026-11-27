@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "启动主页",
-  "short_name": "主页",
-  "description": "搜索框 + 快捷方式的启动主页",
+  "name": "Browser homepage",
+  "short_name": "Search",
+  "description": "搜索栏+快捷入口的主页",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
